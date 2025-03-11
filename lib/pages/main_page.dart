@@ -38,7 +38,7 @@ class _MainPageState extends State<MainPage> {
         currentIndex: _selectedIndex,
         unselectedItemColor: AppColors.kYellowColor,
         selectedItemColor: AppColors.kBlueGrey,
-        selectedLabelStyle: AppTextStyle.bottemLabelStyle,
+        selectedLabelStyle: AppTextStyle.kBottemLabelStyle,
         elevation: 0,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(

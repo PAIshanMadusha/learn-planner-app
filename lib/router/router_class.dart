@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learn_planner/pages/add_new_course.dart';
 import 'package:learn_planner/pages/main_page.dart';
 
 class RouterClass {
@@ -16,9 +17,17 @@ class RouterClass {
       //HomePage
       GoRoute(
         path: "/",
-        name: "main",
+        name: "Main",
         builder: (context, state) {
           return MainPage();
+        },
+      ),
+      //Add new Course
+      GoRoute(
+        path: "/add-new-course",
+        name: "Add New Course",
+        builder: (context, state) {
+          return AddNewCourse();
         },
       ),
     ],
