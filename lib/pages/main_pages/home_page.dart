@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learn_planner/services/course_service.dart';
 import 'package:learn_planner/utils/app_colors.dart';
 import 'package:learn_planner/utils/app_constance.dart';
 import 'package:learn_planner/utils/app_text_style.dart';
@@ -16,6 +18,7 @@ class HomePage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(AppConstance.kPaddingValue),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -41,23 +44,142 @@ class HomePage extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: AppConstance.kSizedBoxValue),
-                ElevatedButton.icon(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(
-                      AppColors.kYellowColor,
+                Center(
+                  child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                        AppColors.kYellowColor,
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-                    GoRouter.of(context).push("/add-new-course");
-                  },
-                  label: Text(
-                    "Add a Course",
-                    style: AppTextStyle.kNormalTextStyle.copyWith(
+                    onPressed: () {
+                      GoRouter.of(context).push("/add-new-course");
+                    },
+                    label: Text(
+                      "Add a Course",
+                      style: AppTextStyle.kNormalTextStyle.copyWith(
+                        color: AppColors.kBlackColor,
+                      ),
+                    ),
+                    icon: Icon(
+                      Icons.add,
+                      size: 28,
                       color: AppColors.kBlackColor,
                     ),
                   ),
-                  icon: Icon(Icons.add, size: 28
-                  , color: AppColors.kBlackColor),
+                ),
+                SizedBox(height: AppConstance.kSizedBoxValue),
+                Text(
+                  "Your Courses",
+                  style: AppTextStyle.kMainTitleStyle.copyWith(
+                    fontSize: 26,
+                    color: AppColors.kYellowColor,
+                  ),
+                ),
+                SizedBox(height: AppConstance.kSizedBoxValue),
+                Text(
+                  "Below appear your running courses right now",
+                  style: AppTextStyle.kBottemLabelStyle,
+                ),
+                SizedBox(height: AppConstance.kSizedBoxValue),
+                StreamBuilder(
+                  stream: CourseService().courses,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.kYellowColor,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          "Error: ${snapshot.error}",
+                          style: AppTextStyle.kBottemLabelStyle,
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Column(
+                          children: [
+                            SizedBox(height: AppConstance.kSizedBoxValue * 8),
+                            SvgPicture.asset(
+                              "assets/emptydatapic.svg",
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(height: AppConstance.kSizedBoxValue),
+                            SizedBox(
+                              width: 280,
+                              child: Text(
+                                "No courses are available! You can add courses by clicking the add a course button.",
+                                style: AppTextStyle.kLabelTextStyle.copyWith(
+                                  fontSize: 12,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      final courses = snapshot.data!;
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: courses.length,
+                        itemBuilder: (context, index) {
+                          final course = courses[index];
+                          return Container(
+                            margin: EdgeInsets.only(
+                              bottom: AppConstance.kPaddingValue,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                AppConstance.kRoundCornerValue,
+                              ),
+                              gradient: AppColors.kCourseCardColor,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.kCourseCardColor1,
+                                  spreadRadius: 2,
+                                  blurRadius: 2,
+                                ),
+                              ],
+                            ),
+                            child: ListTile(
+                              leading: Icon(
+                                Icons.school,
+                                size: 40,
+                                color: AppColors.kYellowColor,
+                              ),
+                              title: Text(
+                                course.name,
+                                style: AppTextStyle.kNormalTextStyle.copyWith(
+                                  color: AppColors.kBlackColor,
+                                ),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    course.duration,
+                                    style: AppTextStyle.kBottemLabelStyle
+                                        .copyWith(fontSize: 20),
+                                  ),
+                                  Text(
+                                    course.description,
+                                    style: AppTextStyle.kLabelTextStyle,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ],
             ),

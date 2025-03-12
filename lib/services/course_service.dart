@@ -8,8 +8,8 @@ class CourseService {
       .collection("courses");
 
   //Add a New Course
-  Future<void> createNewCourse(CourseModel course) async{
-    try{
+  Future<void> createNewCourse(CourseModel course) async {
+    try {
       //Convert the Course Object to a Map
       final Map<String, dynamic> data = course.toJson();
 
@@ -18,9 +18,24 @@ class CourseService {
 
       //Update the Document with Generated Id
       await docRef.update({"id": docRef.id});
-
-    }catch(error){
+    } catch (error) {
       debugPrint("Error Creating a Course: $error");
     }
-  }    
+  }
+
+  //Get All Courses as a Stream
+  Stream<List<CourseModel>> get courses {
+    try {
+      return courseCollection.snapshots().map((snapshot) {
+        return snapshot.docs
+            .map(
+              (doc) => CourseModel.fromJson(doc.data() as Map<String, dynamic>),
+            )
+            .toList();
+      });
+    } catch (error) {
+      debugPrint("Error: $error");
+      return Stream.empty();
+    }
+  }
 }
