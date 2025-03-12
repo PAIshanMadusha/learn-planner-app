@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learn_planner/helpers/app_helpers.dart';
+import 'package:learn_planner/models/course_model.dart';
+import 'package:learn_planner/services/course_service.dart';
 import 'package:learn_planner/utils/app_colors.dart';
 import 'package:learn_planner/utils/app_constance.dart';
 import 'package:learn_planner/utils/app_text_style.dart';
@@ -26,6 +29,30 @@ class AddNewCourse extends StatelessWidget {
     if (_formKey.currentState?.validate() ?? false) {
       //Save the Form
       _formKey.currentState?.save();
+      try {
+        final CourseModel course = CourseModel(
+          id: "",
+          name: _courseNameController.text,
+          description: _courseDescriptionController.text,
+          duration: _courseDurationController.text,
+          schedule: _courseScheduleController.text,
+          instructor: _courseInstructorController.text,
+        );
+        await CourseService().createNewCourse(course);
+        if (context.mounted) {
+          AppHelpers.showSnackBar(context, "Course Added Successfully!");
+        }
+        
+        await Future.delayed(Duration(seconds: 2));
+
+        if(context.mounted){
+          GoRouter.of(context).go("/");
+        }
+      } catch (error) {
+        if (context.mounted) {
+          AppHelpers.showSnackBar(context, "Faild to Add Course!");
+        }
+      }
     }
   }
 
