@@ -142,13 +142,18 @@ class HomePage extends StatelessWidget {
                               gradient: AppColors.kCourseCardColor,
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.kCourseCardColor1,
-                                  spreadRadius: 2,
-                                  blurRadius: 2,
+                                  color: AppColors.kWhiteColor,
+                                  spreadRadius: 1,
+                                  blurRadius: 1,
                                 ),
                               ],
                             ),
                             child: ListTile(
+                              onTap: () {
+                                GoRouter.of(
+                                  context,
+                                ).push("/single-course", extra: course);
+                              },
                               leading: Icon(
                                 Icons.school,
                                 size: 40,
