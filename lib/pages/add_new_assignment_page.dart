@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learn_planner/helpers/app_helpers.dart';
+import 'package:learn_planner/models/assignment_model.dart';
 import 'package:learn_planner/models/course_model.dart';
+import 'package:learn_planner/services/assignment_service.dart';
 import 'package:learn_planner/utils/app_colors.dart';
 import 'package:learn_planner/utils/app_constance.dart';
 import 'package:learn_planner/utils/app_text_style.dart';
@@ -61,7 +64,34 @@ class AddNewAssignmentPage extends StatelessWidget {
 
   //Add Assignment
   void _addAssignment(BuildContext context) async {
-    if (_formKey.currentState?.validate() ?? false) {}
+    if (_formKey.currentState?.validate() ?? false) {
+      try {
+        //Create a New Assignment
+        final AssignmentModel assignment = AssignmentModel(
+          id: "",
+          subject: _assignmentSubjectController.text,
+          name: _assignmentNameController.text,
+          duration: _assignmentDurationController.text,
+          description: _assignmentDescriptionController.text,
+          dueDate: _selectDate.value,
+          dueTime: _selectTime.value,
+        );
+        //Add Assignment to Database
+        AssignmentService().createAssignment(course.id, assignment);
+
+        AppHelpers.showSnackBar(context, "Assignment Added Successfully!");
+
+        await Future.delayed(Duration(seconds: 1));
+
+        if(context.mounted) {
+          GoRouter.of(context).pop();
+        }
+      } catch (error) {
+        if(context.mounted) {
+          AppHelpers.showSnackBar(context, "Faild to Add Assignment!");
+        }
+      }
+    }
   }
 
   @override
@@ -147,7 +177,7 @@ class AddNewAssignmentPage extends StatelessWidget {
                     SizedBox(height: AppConstance.kSizedBoxValue),
                     CustomInputField(
                       controller: _assignmentDescriptionController,
-                      labelText: "Assignment Discription",
+                      labelText: "Assignment Description",
                       validator: (value) {
                         if (value?.isEmpty ?? true) {
                           return "Please Enter a Assignment Description";
