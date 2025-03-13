@@ -10,8 +10,8 @@ import 'package:learn_planner/utils/app_text_style.dart';
 import 'package:learn_planner/widgets/custom_button.dart';
 import 'package:learn_planner/widgets/custom_input_field.dart';
 
-class AddNewCourse extends StatelessWidget {
-  AddNewCourse({super.key});
+class AddNewCoursePage extends StatelessWidget {
+  AddNewCoursePage({super.key});
 
   final _formKey = GlobalKey<FormState>();
 

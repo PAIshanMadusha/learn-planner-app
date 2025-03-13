@@ -53,7 +53,7 @@ class SingleCoursePage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: AppConstance.kSizedBoxValue),
-              Divider(color: AppColors.kBlueGrey, thickness: 2),
+              Divider(color: AppColors.kBlueGrey, thickness: 1),
               SizedBox(height: AppConstance.kSizedBoxValue),
               Container(
                 padding: EdgeInsets.all(AppConstance.kPaddingValue),
@@ -143,7 +143,7 @@ class SingleCoursePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: AppConstance.kSizedBoxValue),
-              Divider(color: AppColors.kBlueGrey, thickness: 2),
+              Divider(color: AppColors.kBlueGrey, thickness: 1),
               SizedBox(height: AppConstance.kSizedBoxValue),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

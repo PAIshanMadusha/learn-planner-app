@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:learn_planner/pages/main_pages/assignments_page.dart';
 import 'package:learn_planner/pages/main_pages/courses_page.dart';
 import 'package:learn_planner/pages/main_pages/home_page.dart';
-import 'package:learn_planner/pages/main_pages/learner_profile.dart';
+import 'package:learn_planner/pages/main_pages/learner_profile_page.dart';
 import 'package:learn_planner/utils/app_colors.dart';
 import 'package:learn_planner/utils/app_text_style.dart';
 
@@ -21,7 +21,7 @@ class _MainPageState extends State<MainPage> {
     HomePage(),
     CoursesPage(),
     AssignmentsPage(),
-    LearnerProfile(),
+    LearnerProfilePage(),
   ];
 
   void _onTapPage(int index) {

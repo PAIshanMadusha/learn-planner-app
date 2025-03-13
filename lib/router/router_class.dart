@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learn_planner/models/course_model.dart';
 import 'package:learn_planner/pages/add_new_assignment_page.dart';
-import 'package:learn_planner/pages/add_new_course.dart';
+import 'package:learn_planner/pages/add_new_course_page.dart';
 import 'package:learn_planner/pages/add_new_note_page.dart';
 import 'package:learn_planner/pages/main_page.dart';
 import 'package:learn_planner/pages/single_course_page.dart';
@@ -31,7 +31,7 @@ class RouterClass {
         path: "/add-new-course",
         name: "Add New Course",
         builder: (context, state) {
-          return AddNewCourse();
+          return AddNewCoursePage();
         },
       ),
       //Single Course
