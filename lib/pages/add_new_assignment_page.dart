@@ -61,7 +61,7 @@ class AddNewAssignmentPage extends StatelessWidget {
 
   //Add Assignment
   void _addAssignment(BuildContext context) async {
-    if (_formKey.currentState!.validate() ?? false) {}
+    if (_formKey.currentState?.validate() ?? false) {}
   }
 
   @override
