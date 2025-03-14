@@ -1,8 +1,12 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learn_planner/helpers/app_helpers.dart';
 import 'package:learn_planner/models/course_model.dart';
+import 'package:learn_planner/models/note_model.dart';
+import 'package:learn_planner/services/firestore_database/note_service.dart';
 import 'package:learn_planner/utils/app_colors.dart';
 import 'package:learn_planner/utils/app_constance.dart';
 import 'package:learn_planner/utils/app_text_style.dart';
@@ -47,7 +51,33 @@ class _AddNewNotePageState extends State<AddNewNotePage> {
 
   //Add Note
   void _addNote(BuildContext context) async {
-    if (_formKey.currentState?.validate() ?? false) {}
+    if (_formKey.currentState?.validate() ?? false) {
+      try {
+        //Create a New Note Object
+        final NoteModel note = NoteModel(
+          id: "",
+          title: _noteTitleController.text,
+          section: _noteSectionController.text,
+          description: _noteDescriptionController.text,
+          references: _noteReferencesController.text,
+          imageData: _selectedImage != null ? File(_selectedImage!.path) : null,
+        );
+        await NoteService().createNote(widget.course.id, note);
+        if(context.mounted) {
+          AppHelpers.showSnackBar(context, "Note Added Successfully!");
+        }
+        
+        await Future.delayed(Duration(seconds: 1));
+
+        if(context.mounted) {
+          GoRouter.of(context).pop();
+        }
+      } catch (error) {
+        if(context.mounted) {
+          AppHelpers.showSnackBar(context, "Failed to Add Successfully!");
+        }
+      }
+    }
   }
 
   @override

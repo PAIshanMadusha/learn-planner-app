@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:learn_planner/helpers/app_helpers.dart';
 import 'package:learn_planner/models/assignment_model.dart';
 import 'package:learn_planner/models/course_model.dart';
-import 'package:learn_planner/services/assignment_service.dart';
+import 'package:learn_planner/services/firestore_database/assignment_service.dart';
 import 'package:learn_planner/utils/app_colors.dart';
 import 'package:learn_planner/utils/app_constance.dart';
 import 'package:learn_planner/utils/app_text_style.dart';
