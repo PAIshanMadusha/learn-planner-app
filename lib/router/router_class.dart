@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learn_planner/models/assignment_model.dart';
 import 'package:learn_planner/models/course_model.dart';
+import 'package:learn_planner/models/note_model.dart';
 import 'package:learn_planner/pages/add_new_assignment_page.dart';
 import 'package:learn_planner/pages/add_new_course_page.dart';
 import 'package:learn_planner/pages/add_new_note_page.dart';
 import 'package:learn_planner/pages/main_page.dart';
+import 'package:learn_planner/pages/single_assignment_page.dart';
 import 'package:learn_planner/pages/single_course_page.dart';
+import 'package:learn_planner/pages/single_note_page.dart';
 
 class RouterClass {
   final router = GoRouter(
@@ -59,6 +63,24 @@ class RouterClass {
         builder: (context, state) {
           final CourseModel course = state.extra as CourseModel;
           return AddNewNotePage(course: course);
+        },
+      ),
+      //Single Note
+      GoRoute(
+        path: "/single-note",
+        name: "Single Note Page",
+        builder: (context, state) {
+          final NoteModel note = state.extra as NoteModel;
+          return SingleNotePage(note: note);
+        },
+      ),
+      //Single Assignment
+      GoRoute(
+        path: "/single-assignment",
+        name: "Single Assignment Page",
+        builder: (context, state) {
+          final AssignmentModel assignment = state.extra as AssignmentModel;
+          return SingleAssignmentPage(assignment: assignment);
         },
       ),
     ],
