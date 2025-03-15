@@ -38,4 +38,17 @@ class CourseService {
       return Stream.empty();
     }
   }
+
+  //Get Courses as a List
+  Future<List<CourseModel>> getCourse() async {
+    try {
+      final QuerySnapshot snapshot = await courseCollection.get();
+      return snapshot.docs.map((doc) {
+        return CourseModel.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+    } catch (error) {
+      debugPrint("Error: $error");
+      return [];
+    }
+  }
 }
