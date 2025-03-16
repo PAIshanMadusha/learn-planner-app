@@ -57,6 +57,7 @@ class SingleCoursePage extends StatelessWidget {
               SizedBox(height: AppConstance.kSizedBoxValue),
               Container(
                 padding: EdgeInsets.all(AppConstance.kPaddingValue),
+                width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(
                     AppConstance.kRoundCornerValue,

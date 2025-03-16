@@ -48,6 +48,137 @@ class SingleNotePage extends StatelessWidget {
               SizedBox(height: AppConstance.kSizedBoxValue),
               Divider(color: AppColors.kBlueGrey, thickness: 1),
               SizedBox(height: AppConstance.kSizedBoxValue),
+              Container(
+                padding: EdgeInsets.all(AppConstance.kPaddingValue),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    AppConstance.kRoundCornerValue,
+                  ),
+                  // ignore: deprecated_member_use
+                  color: AppColors.kBlueGrey.withOpacity(0.2),
+                  boxShadow: [
+                    BoxShadow(
+                      // ignore: deprecated_member_use
+                      color: AppColors.kBlackColor.withOpacity(0.3),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Note Title:",
+                      style: AppTextStyle.kBottemLabelStyle.copyWith(
+                        color: AppColors.kYellowColor,
+                      ),
+                    ),
+                    Text(
+                      note.title,
+                      style: AppTextStyle.kNormalTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    SizedBox(height: AppConstance.kSizedBoxValue),
+                    Text(
+                      "Note Section:",
+                      style: AppTextStyle.kBottemLabelStyle.copyWith(
+                        color: AppColors.kYellowColor,
+                      ),
+                    ),
+                    Text(
+                      note.section,
+                      style: AppTextStyle.kNormalTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    SizedBox(height: AppConstance.kSizedBoxValue),
+                    Text(
+                      "Note Description:",
+                      style: AppTextStyle.kBottemLabelStyle.copyWith(
+                        color: AppColors.kYellowColor,
+                      ),
+                    ),
+                    Text(
+                      note.description,
+                      style: AppTextStyle.kNormalTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    SizedBox(height: AppConstance.kSizedBoxValue),
+                    Text(
+                      "Note References:",
+                      style: AppTextStyle.kBottemLabelStyle.copyWith(
+                        color: AppColors.kYellowColor,
+                      ),
+                    ),
+                    Text(
+                      note.references,
+                      style: AppTextStyle.kNormalTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    SizedBox(height: AppConstance.kSizedBoxValue),
+                    if (note.imageUrl != null)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Image View",
+                            style: AppTextStyle.kNormalTextStyle,
+                          ),
+                          SizedBox(height: AppConstance.kSizedBoxValue),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                AppConstance.kRoundCornerValue,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.kBlueGrey,
+                                  spreadRadius: 2,
+                                  blurRadius: 1,
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                AppConstance.kRoundCornerValue,
+                              ),
+                              child: Image.network(
+                                note.imageUrl!,
+                                height: 540,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Image View",
+                            style: AppTextStyle.kNormalTextStyle,
+                          ),
+                          SizedBox(height: AppConstance.kSizedBoxValue),
+                          Center(
+                            child: SvgPicture.asset(
+                              "assets/emptydatapic.svg",
+                              width: 180,
+                              height: 180,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
