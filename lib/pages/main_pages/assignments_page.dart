@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:learn_planner/models/assignment_model.dart';
 import 'package:learn_planner/services/firestore_database/assignment_service.dart';
+import 'package:learn_planner/services/firestore_database/notification_service.dart';
 import 'package:learn_planner/utils/app_colors.dart';
 import 'package:learn_planner/utils/app_constance.dart';
 import 'package:learn_planner/utils/app_text_style.dart';
@@ -15,8 +16,16 @@ class AssignmentsPage extends StatelessWidget {
     return await AssignmentService().getAssignmentsByCourseName();
   }
 
+  Future<void> _checkAndStoreOverdueAssignments() async {
+    await NotificationService().storeOverdueAssignments();
+  }
+
   @override
   Widget build(BuildContext context) {
+    //Trigger the Method when the Screen is Loaded
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAndStoreOverdueAssignments();
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text("Assignments Page", style: AppTextStyle.kMainTitleStyle),

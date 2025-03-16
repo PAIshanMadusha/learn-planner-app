@@ -7,6 +7,7 @@ import 'package:learn_planner/pages/add_new_assignment_page.dart';
 import 'package:learn_planner/pages/add_new_course_page.dart';
 import 'package:learn_planner/pages/add_new_note_page.dart';
 import 'package:learn_planner/pages/main_page.dart';
+import 'package:learn_planner/pages/notifications_page.dart';
 import 'package:learn_planner/pages/single_assignment_page.dart';
 import 'package:learn_planner/pages/single_course_page.dart';
 import 'package:learn_planner/pages/single_note_page.dart';
@@ -81,6 +82,14 @@ class RouterClass {
         builder: (context, state) {
           final AssignmentModel assignment = state.extra as AssignmentModel;
           return SingleAssignmentPage(assignment: assignment);
+        },
+      ),
+      //Notifications Page
+      GoRoute(
+        path: "/notification-page",
+        name: "Notification Page",
+        builder: (context, state) {
+          return NotificationsPage();
         },
       ),
     ],
