@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:learn_planner/models/assignment_model.dart';
 import 'package:learn_planner/utils/app_colors.dart';
 import 'package:learn_planner/utils/app_constance.dart';
@@ -36,7 +38,129 @@ class SingleAssignmentPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(AppConstance.kPaddingValue),
-          child: Column(children: [Text(assignment.name)]),
+          child: Column(
+            children: [
+              SvgPicture.asset(
+                "assets/assignment.svg",
+                width: 180,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(height: AppConstance.kSizedBoxValue),
+              Divider(color: AppColors.kBlueGrey, thickness: 1),
+              SizedBox(height: AppConstance.kSizedBoxValue),
+              Container(
+                padding: EdgeInsets.all(AppConstance.kPaddingValue),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    AppConstance.kRoundCornerValue,
+                  ),
+                  // ignore: deprecated_member_use
+                  color: AppColors.kBlueGrey.withOpacity(0.2),
+                  boxShadow: [
+                    BoxShadow(
+                      // ignore: deprecated_member_use
+                      color: AppColors.kBlackColor.withOpacity(0.3),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Assignment Name:",
+                      style: AppTextStyle.kBottemLabelStyle.copyWith(
+                        color: AppColors.kYellowColor,
+                      ),
+                    ),
+                    Text(
+                      assignment.name,
+                      style: AppTextStyle.kNormalTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    SizedBox(height: AppConstance.kSizedBoxValue),
+                    Text(
+                      "Assignment Subject:",
+                      style: AppTextStyle.kBottemLabelStyle.copyWith(
+                        color: AppColors.kYellowColor,
+                      ),
+                    ),
+                    Text(
+                      assignment.subject,
+                      style: AppTextStyle.kNormalTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    SizedBox(height: AppConstance.kSizedBoxValue),
+                    Text(
+                      "Assignment Duration:",
+                      style: AppTextStyle.kBottemLabelStyle.copyWith(
+                        color: AppColors.kYellowColor,
+                      ),
+                    ),
+                    Text(
+                      assignment.duration,
+                      style: AppTextStyle.kNormalTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    SizedBox(height: AppConstance.kSizedBoxValue),
+                    Text(
+                      "Assignment Due Date:",
+                      style: AppTextStyle.kBottemLabelStyle.copyWith(
+                        color: AppColors.kYellowColor,
+                      ),
+                    ),
+                    Text(
+                      DateFormat.yMMMd().format(assignment.dueDate),
+                      style: AppTextStyle.kNormalTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    SizedBox(height: AppConstance.kSizedBoxValue),
+                    Text(
+                      "Assignment Time:",
+                      style: AppTextStyle.kBottemLabelStyle.copyWith(
+                        color: AppColors.kYellowColor,
+                      ),
+                    ),
+                    Text(
+                      DateFormat.Hm().format(
+                        DateTime(
+                          0,
+                          0,
+                          0,
+                          assignment.dueTime.hour,
+                          assignment.dueTime.minute,
+                        ),
+                      ),
+                      style: AppTextStyle.kNormalTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    SizedBox(height: AppConstance.kSizedBoxValue),
+                    Text(
+                      "Assignment Description:",
+                      style: AppTextStyle.kBottemLabelStyle.copyWith(
+                        color: AppColors.kYellowColor,
+                      ),
+                    ),
+                    Text(
+                      assignment.description,
+                      style: AppTextStyle.kNormalTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    SizedBox(height: AppConstance.kSizedBoxValue),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

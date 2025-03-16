@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learn_planner/models/note_model.dart';
 import 'package:learn_planner/utils/app_colors.dart';
@@ -36,7 +37,19 @@ class SingleNotePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(AppConstance.kPaddingValue),
-          child: Column(children: [Text(note.title)]),
+          child: Column(
+            children: [
+              SvgPicture.asset(
+                "assets/notebook.svg",
+                width: 180,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(height: AppConstance.kSizedBoxValue),
+              Divider(color: AppColors.kBlueGrey, thickness: 1),
+              SizedBox(height: AppConstance.kSizedBoxValue),
+            ],
+          ),
         ),
       ),
     );
