@@ -71,9 +71,10 @@ class _CoursesPageState extends State<CoursesPage> {
               style: TextStyle(color: AppColors.kWhiteColor),
             ),
             content: Text(
-              "Are you sure you want to delete this course?",
+              "Are you sure you want to delete this course?, and you will lose the Course Related Assignment and Notes also.",
               style: AppTextStyle.kBottemLabelStyle.copyWith(
                 color: AppColors.kWhiteColor,
+                fontSize: 12,
               ),
             ),
             actions: [
@@ -99,7 +100,7 @@ class _CoursesPageState extends State<CoursesPage> {
           ),
     );
     if (confirmDelete == true) {
-      await CourseService().deleteCourse(
+      await CourseService().deleteCourseWithSubcollections(
         courseId,
       ); // Delete course from Firestore
       setState(() {

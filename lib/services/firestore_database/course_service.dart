@@ -53,12 +53,30 @@ class CourseService {
   }
 
   //Delete a Course
-  Future<void> deleteCourse(String id) async {
+  Future<void> deleteCourseWithSubcollections(String courseId) async {
     try {
-      await courseCollection.doc(id).delete();
-      debugPrint("Course Deleted!");
+      // Reference to the course document
+      DocumentReference courseRef = courseCollection.doc(courseId);
+
+      // Delete all assignments subcollection documents
+      QuerySnapshot assignmentsSnapshot =
+          await courseRef.collection('assignments').get();
+      for (DocumentSnapshot doc in assignmentsSnapshot.docs) {
+        await doc.reference.delete();
+      }
+
+      // Delete all notes subcollection documents
+      QuerySnapshot notesSnapshot = await courseRef.collection('notes').get();
+      for (DocumentSnapshot doc in notesSnapshot.docs) {
+        await doc.reference.delete();
+      }
+
+      // Finally, delete the course document
+      await courseRef.delete();
+
+      debugPrint("Course and its subcollections deleted successfully!");
     } catch (error) {
-      debugPrint("Error Deleting a Course: $error");
+      debugPrint("Error deleting course and its subcollections: $error");
     }
   }
 }

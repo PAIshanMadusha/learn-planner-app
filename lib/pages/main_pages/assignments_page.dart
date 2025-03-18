@@ -155,6 +155,19 @@ class AssignmentsPage extends StatelessWidget {
                               ),
                               SizedBox(height: AppConstance.kSizedBoxValue),
                               Text(
+                                "Assignment Start Date:",
+                                style: AppTextStyle.kBottemLabelStyle.copyWith(
+                                  color: AppColors.kYellowColor,
+                                ),
+                              ),
+                              Text(
+                                DateFormat.yMMMd().format(assignment.startDate),
+                                style: AppTextStyle.kNormalTextStyle.copyWith(
+                                  fontSize: 15,
+                                ),
+                              ),
+                              SizedBox(height: AppConstance.kSizedBoxValue),
+                              Text(
                                 "Assignment Due Date:",
                                 style: AppTextStyle.kBottemLabelStyle.copyWith(
                                   color: AppColors.kYellowColor,
@@ -168,7 +181,7 @@ class AssignmentsPage extends StatelessWidget {
                               ),
                               SizedBox(height: AppConstance.kSizedBoxValue),
                               Text(
-                                "Assignment Time:",
+                                "Assignment Ending Time:",
                                 style: AppTextStyle.kBottemLabelStyle.copyWith(
                                   color: AppColors.kYellowColor,
                                 ),

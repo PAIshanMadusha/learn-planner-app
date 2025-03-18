@@ -7,6 +7,7 @@ class AssignmentModel {
   final String name;
   final String duration;
   final String description;
+  final DateTime startDate;
   final DateTime dueDate;
   final TimeOfDay dueTime;
 
@@ -16,6 +17,7 @@ class AssignmentModel {
     required this.name,
     required this.duration,
     required this.description,
+    required this.startDate,
     required this.dueDate,
     required this.dueTime,
   });
@@ -28,6 +30,7 @@ class AssignmentModel {
       name: json["name"] ?? "",
       duration: json["duration"] ?? "",
       description: json["description"] ?? "",
+      startDate: (json["startDate"] as Timestamp).toDate(),
       dueDate: (json["dueDate"] as Timestamp).toDate(),
       dueTime: TimeOfDay.fromDateTime((json["dueTime"] as Timestamp).toDate()),
     );
@@ -41,6 +44,7 @@ class AssignmentModel {
       "name": name,
       "duration": duration,
       "description": description,
+      "startDate": startDate,
       "dueDate": Timestamp.fromDate(dueDate),
       "dueTime": Timestamp.fromDate(
         DateTime(

@@ -25,6 +25,9 @@ class AddNewAssignmentPage extends StatelessWidget {
   final TextEditingController _assignmentDescriptionController =
       TextEditingController();
 
+  final ValueNotifier<DateTime> _selectStartDate = ValueNotifier<DateTime>(
+    DateTime.now(),
+  );
   final ValueNotifier<DateTime> _selectDate = ValueNotifier<DateTime>(
     DateTime.now(),
   );
@@ -34,6 +37,7 @@ class AddNewAssignmentPage extends StatelessWidget {
 
   //Initialize ValueNotifiers
   AddNewAssignmentPage({super.key, required this.course}) {
+    _selectStartDate.value = DateTime.now();
     _selectDate.value = DateTime.now();
     _selectTime.value = TimeOfDay.now();
   }
@@ -73,6 +77,7 @@ class AddNewAssignmentPage extends StatelessWidget {
           name: _assignmentNameController.text,
           duration: _assignmentDurationController.text,
           description: _assignmentDescriptionController.text,
+          startDate: _selectStartDate.value,
           dueDate: _selectDate.value,
           dueTime: _selectTime.value,
         );
@@ -83,11 +88,11 @@ class AddNewAssignmentPage extends StatelessWidget {
 
         await Future.delayed(Duration(seconds: 1));
 
-        if(context.mounted) {
+        if (context.mounted) {
           GoRouter.of(context).pop();
         }
       } catch (error) {
-        if(context.mounted) {
+        if (context.mounted) {
           AppHelpers.showSnackBar(context, "Faild to Add Assignment!");
         }
       }
@@ -188,56 +193,160 @@ class AddNewAssignmentPage extends StatelessWidget {
                     SizedBox(height: AppConstance.kSizedBoxValue),
                     Divider(color: AppColors.kBlueGrey, thickness: 1),
                     SizedBox(height: AppConstance.kSizedBoxValue),
-                    Text(
-                      "Select Date & Time",
-                      style: AppTextStyle.kNormalTextStyle.copyWith(
-                        color: AppColors.kBlueGrey,
+                    Container(
+                      padding: EdgeInsets.all(AppConstance.kPaddingValue),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          AppConstance.kRoundCornerValue,
+                        ),
+                        // ignore: deprecated_member_use
+                        color: AppColors.kBlueGrey.withOpacity(0.2),
+                        boxShadow: [
+                          BoxShadow(
+                            // ignore: deprecated_member_use
+                            color: AppColors.kBlackColor.withOpacity(0.3),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(height: AppConstance.kSizedBoxValue),
-                    ValueListenableBuilder<DateTime>(
-                      valueListenable: _selectDate,
-                      builder: (context, date, child) {
-                        return Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Date: ${date.toLocal().toString().split(" ")[0]}",
-                                style: AppTextStyle.kNormalTextStyle,
-                              ),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Select Date & Time",
+                            style: AppTextStyle.kNormalTextStyle.copyWith(
+                              color: AppColors.kYellowColor,
                             ),
-                            ElevatedButton.icon(
-                              onPressed: () => _selectedDate(context),
-                              label: Text("Select"),
-                              icon: Icon(
-                                Icons.calendar_month_outlined,
-                                size: 30,
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                    SizedBox(height: AppConstance.kSizedBoxValue),
-                    ValueListenableBuilder(
-                      valueListenable: _selectTime,
-                      builder: (context, time, child) {
-                        return Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Time: ${time.format(context)}",
-                                style: AppTextStyle.kNormalTextStyle,
-                              ),
-                            ),
-                            ElevatedButton.icon(
-                              onPressed: () => _selectedTime(context),
-                              label: Text("Select"),
-                              icon: Icon(Icons.access_time_outlined, size: 30),
-                            ),
-                          ],
-                        );
-                      },
+                          ),
+                          SizedBox(height: AppConstance.kSizedBoxValue),
+                          ValueListenableBuilder<DateTime>(
+                            valueListenable: _selectDate,
+                            builder: (context, date, child) {
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "Start Date: ${date.toLocal().toString().split(" ")[0]}",
+                                      style: AppTextStyle.kNormalTextStyle
+                                          .copyWith(fontSize: 22),
+                                    ),
+                                  ),
+                                  ElevatedButton.icon(
+                                    style: ButtonStyle(
+                                      side: WidgetStatePropertyAll(
+                                        BorderSide(
+                                          color: AppColors.kWhiteColor,
+                                        ),
+                                      ),
+                                      backgroundColor: WidgetStatePropertyAll(
+                                        AppColors.kBlueGrey,
+                                      ),
+                                    ),
+                                    onPressed: () => _selectedDate(context),
+                                    label: Text(
+                                      "Select",
+                                      style: AppTextStyle.kBottemLabelStyle
+                                          .copyWith(
+                                            color: AppColors.kBlackColor,
+                                          ),
+                                    ),
+                                    icon: Icon(
+                                      Icons.calendar_month_outlined,
+                                      size: 26,
+                                      color: AppColors.kBlackColor,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          SizedBox(height: AppConstance.kSizedBoxValue),
+                          ValueListenableBuilder<DateTime>(
+                            valueListenable: _selectDate,
+                            builder: (context, date, child) {
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "Due Date: ${date.toLocal().toString().split(" ")[0]}",
+                                      style: AppTextStyle.kNormalTextStyle
+                                          .copyWith(fontSize: 21),
+                                    ),
+                                  ),
+                                  ElevatedButton.icon(
+                                    style: ButtonStyle(
+                                      side: WidgetStatePropertyAll(
+                                        BorderSide(
+                                          color: AppColors.kWhiteColor,
+                                        ),
+                                      ),
+                                      backgroundColor: WidgetStatePropertyAll(
+                                        AppColors.kBlueGrey,
+                                      ),
+                                    ),
+                                    onPressed: () => _selectedDate(context),
+                                    label: Text(
+                                      "Select",
+                                      style: AppTextStyle.kBottemLabelStyle
+                                          .copyWith(
+                                            color: AppColors.kBlackColor,
+                                          ),
+                                    ),
+                                    icon: Icon(
+                                      Icons.calendar_month_outlined,
+                                      size: 26,
+                                      color: AppColors.kBlackColor,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          SizedBox(height: AppConstance.kSizedBoxValue),
+                          ValueListenableBuilder(
+                            valueListenable: _selectTime,
+                            builder: (context, time, child) {
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "Ending Time: ${time.format(context)}",
+                                      style: AppTextStyle.kNormalTextStyle
+                                          .copyWith(fontSize: 21),
+                                    ),
+                                  ),
+                                  ElevatedButton.icon(
+                                    style: ButtonStyle(
+                                      side: WidgetStatePropertyAll(
+                                        BorderSide(
+                                          color: AppColors.kWhiteColor,
+                                        ),
+                                      ),
+                                      backgroundColor: WidgetStatePropertyAll(
+                                        AppColors.kBlueGrey,
+                                      ),
+                                    ),
+                                    onPressed: () => _selectedTime(context),
+                                    label: Text(
+                                      "Select",
+                                      style: AppTextStyle.kBottemLabelStyle
+                                          .copyWith(
+                                            color: AppColors.kBlackColor,
+                                          ),
+                                    ),
+                                    icon: Icon(
+                                      Icons.access_time_outlined,
+                                      size: 26,
+                                      color: AppColors.kBlackColor,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: AppConstance.kSizedBoxValue * 2),
                     CustomButton(
