@@ -47,6 +47,9 @@ class HomePage extends StatelessWidget {
                 Center(
                   child: ElevatedButton.icon(
                     style: ButtonStyle(
+                      side: WidgetStatePropertyAll(
+                        BorderSide(color: AppColors.kWhiteColor, width: 1),
+                      ),
                       backgroundColor: WidgetStatePropertyAll(
                         AppColors.kYellowColor,
                       ),
@@ -77,8 +80,9 @@ class HomePage extends StatelessWidget {
                 ),
                 SizedBox(height: AppConstance.kSizedBoxValue),
                 Text(
-                  "Below appear your running courses right now",
-                  style: AppTextStyle.kBottemLabelStyle,
+                  "Below appear your running courses right now, and by selecting a course, you can add notes and assignments related to the course.",
+                  style: AppTextStyle.kBottemLabelStyle.copyWith(fontSize: 14),
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(height: AppConstance.kSizedBoxValue),
                 StreamBuilder(

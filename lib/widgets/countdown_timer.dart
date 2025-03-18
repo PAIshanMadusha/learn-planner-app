@@ -69,10 +69,10 @@ class _CountdownTimerState extends State<CountdownTimer> {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppConstance.kRoundCornerValue),
-        gradient: AppColors.kCourseCardColor,
+        gradient: AppColors.kAssignmentCardColor,
         boxShadow: [
           BoxShadow(
-            color: AppColors.kWhiteColor,
+            color: AppColors.kAssignmentCardColor2,
             spreadRadius: 1,
             blurRadius: 1,
           ),
@@ -83,7 +83,8 @@ class _CountdownTimerState extends State<CountdownTimer> {
           formattedTime,
           style: AppTextStyle.kNormalTextStyle.copyWith(
             color: AppColors.kRedAccentColor,
-            fontSize: 25,
+            fontSize: 26,
+            fontWeight: FontWeight.w900,
           ),
         ),
       ),

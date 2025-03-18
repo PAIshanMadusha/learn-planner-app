@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learn_planner/helpers/app_helpers.dart';
 import 'package:learn_planner/models/assignment_model.dart';
 import 'package:learn_planner/models/course_model.dart';
 import 'package:learn_planner/models/note_model.dart';
@@ -12,8 +13,35 @@ import 'package:learn_planner/utils/app_constance.dart';
 import 'package:learn_planner/utils/app_text_style.dart';
 import 'package:intl/intl.dart';
 
-class CoursesPage extends StatelessWidget {
+class CoursesPage extends StatefulWidget {
   const CoursesPage({super.key});
+
+  @override
+  State<CoursesPage> createState() => _CoursesPageState();
+}
+
+class _CoursesPageState extends State<CoursesPage> {
+  // Created a Future variable to store fetched data
+  late Future<Map<String, dynamic>> _futureData;
+
+  // Created a local list to store courses and update the UI dynamically
+  List<CourseModel> _courses = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData(); // Load data when the widget initializes
+  }
+
+  // This method fetches data and updates the `_courses` list
+  void _loadData() {
+    _futureData = _fetchAllData();
+    _futureData.then((data) {
+      setState(() {
+        _courses = data["courses"] as List<CourseModel>? ?? [];
+      });
+    });
+  }
 
   Future<Map<String, dynamic>> _fetchAllData() async {
     try {
@@ -32,6 +60,59 @@ class CoursesPage extends StatelessWidget {
     }
   }
 
+  // Method to delete a course and update the UI immediately
+  Future<void> _confirmDeleteCourse(String courseId) async {
+    bool? confirmDelete = await showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(
+              "Confirm Deletion",
+              style: TextStyle(color: AppColors.kWhiteColor),
+            ),
+            content: Text(
+              "Are you sure you want to delete this course?",
+              style: AppTextStyle.kBottemLabelStyle.copyWith(
+                color: AppColors.kWhiteColor,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false), // Cancel
+                child: Text(
+                  "Cancel",
+                  style: AppTextStyle.kBottemLabelStyle.copyWith(
+                    color: AppColors.kWhiteColor,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true), // Confirm delete
+                child: Text(
+                  "Delete",
+                  style: AppTextStyle.kBottemLabelStyle.copyWith(
+                    color: AppColors.kRedAccentColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+    );
+    if (confirmDelete == true) {
+      await CourseService().deleteCourse(
+        courseId,
+      ); // Delete course from Firestore
+      setState(() {
+        _courses.removeWhere(
+          (course) => course.id == courseId,
+        ); // Remove from local list
+      });
+      if (mounted) {
+        AppHelpers.showSnackBar(context, "Course Deleted Successfully!");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +123,7 @@ class CoursesPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(AppConstance.kPaddingValue),
         child: FutureBuilder(
-          future: _fetchAllData(),
+          future: _futureData,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
@@ -375,6 +456,29 @@ class CoursesPage extends StatelessWidget {
                               }).toList(),
                         ),
                       ],
+                      SizedBox(height: AppConstance.kSizedBoxValue),
+                      Center(
+                        child: ElevatedButton.icon(
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                              AppColors.kRedAccentColor,
+                            ),
+                          ),
+                          onPressed: () => _confirmDeleteCourse(course.id),
+                          label: Text(
+                            "Delete Course",
+                            style: AppTextStyle.kNormalTextStyle.copyWith(
+                              color: AppColors.kWhiteColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                          icon: Icon(
+                            Icons.delete,
+                            size: 24,
+                            color: AppColors.kWhiteColor,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 );

@@ -51,4 +51,14 @@ class CourseService {
       return [];
     }
   }
+
+  //Delete a Course
+  Future<void> deleteCourse(String id) async {
+    try {
+      await courseCollection.doc(id).delete();
+      debugPrint("Course Deleted!");
+    } catch (error) {
+      debugPrint("Error Deleting a Course: $error");
+    }
+  }
 }

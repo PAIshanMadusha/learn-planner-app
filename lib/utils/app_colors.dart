@@ -5,18 +5,19 @@ class AppColors {
   static const Color kBlackColor = Colors.black;
   static const Color kWhiteColor = Colors.white;
   static const Color kRedAccentColor = Colors.redAccent;
+    static const Color kYellowColor = Colors.yellowAccent;
 
-  static const Color kCourseCardColor1 = Color.fromARGB(255, 200, 255, 248);
-  static const Color kYellowColor = Colors.yellowAccent;
+  static const Color kCourseCardColor1 = Color(0xff4379F2);
+  static const Color kCourseCardColor2 = Color(0xffFFEB00);
 
   static const Gradient kCourseCardColor = LinearGradient(
-    colors: [kCourseCardColor1, kYellowColor],
+    colors: [kCourseCardColor1, kCourseCardColor2],
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   );
 
-  static const Color kAssignmentCardColor1 = Color(0xffE6B2BA);
-  static const Color kAssignmentCardColor2 = Color(0xffC599B6);
+  static const Color kAssignmentCardColor1 = Color(0xff693382);
+  static const Color kAssignmentCardColor2 = Color(0xff336D82);
 
   static const Gradient kAssignmentCardColor = LinearGradient(
     colors: [kAssignmentCardColor1, kAssignmentCardColor2],
@@ -24,8 +25,8 @@ class AppColors {
     end: Alignment.centerRight,
   );
 
-  static const Color kNoteCardColor1 = Color(0xffFF8989);
-  static const Color kNotetCardColor2 = Color(0xffF8ED8C);
+  static const Color kNoteCardColor1 = Color(0xff9F5255);
+  static const Color kNotetCardColor2 = Color(0xffE16A54);
 
   static const Gradient kNoteCardColor = LinearGradient(
     colors: [kNoteCardColor1, kNotetCardColor2],
