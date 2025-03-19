@@ -5,7 +5,8 @@ class AppColors {
   static const Color kBlackColor = Colors.black;
   static const Color kWhiteColor = Colors.white;
   static const Color kRedAccentColor = Colors.redAccent;
-    static const Color kYellowColor = Colors.yellowAccent;
+  static const Color kYellowColor = Colors.yellowAccent;
+  static const Color kBlueColor = Colors.blue;
 
   static const Color kCourseCardColor1 = Color(0xff4379F2);
   static const Color kCourseCardColor2 = Color(0xffFFEB00);
@@ -34,8 +35,8 @@ class AppColors {
     end: Alignment.centerRight,
   );
 
-  static const Color kProfileCardColor1 = Color(0xffC07F00);
-  static const Color kProfileCardColor2 = Color(0xff4C3D3D);
+  static const Color kProfileCardColor1 = Color(0xff4F959D);
+  static const Color kProfileCardColor2 = Color(0xff205781);
 
   static const Gradient kProfileCardColor = LinearGradient(
     colors: [kProfileCardColor1, kProfileCardColor2],

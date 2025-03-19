@@ -76,18 +76,18 @@ class AssignmentsPage extends StatelessWidget {
                 final courseName = assignmentsMap.keys.elementAt(index);
                 final assignments = assignmentsMap[courseName]!;
                 return ExpansionTile(
-                  collapsedIconColor: AppColors.kAssignmentCardColor1,
-                  iconColor: AppColors.kAssignmentCardColor1,
+                  collapsedIconColor: AppColors.kBlueColor,
+                  iconColor: AppColors.kBlueColor,
                   leading: Icon(
                     Icons.task,
                     size: 30,
-                    color: AppColors.kAssignmentCardColor1,
+                    color: AppColors.kBlueColor,
                   ),
                   title: Text(
                     courseName.toUpperCase(),
                     style: AppTextStyle.kNormalTextStyle.copyWith(
                       fontSize: 21,
-                      color: AppColors.kAssignmentCardColor1,
+                      color: AppColors.kBlueColor,
                     ),
                   ),
                   children:

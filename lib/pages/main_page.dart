@@ -16,7 +16,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 3;
+  int _selectedIndex = 0;
 
   static const List<Widget> _pages = [
     HomePage(),
@@ -34,88 +34,91 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final theme = Theme.of(context); 
+
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: _onTapPage,
-        currentIndex: _selectedIndex,
-        unselectedItemColor: AppColors.kYellowColor,
-        selectedItemColor: AppColors.kBlueGrey,
-        selectedLabelStyle: AppTextStyle.kBottemLabelStyle,
-        elevation: 0,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/house.svg",
-              width: 25,
-              height: 25,
-              colorFilter: ColorFilter.mode(
-                _selectedIndex == 0
-                    ? AppColors.kBlueGrey
-                    : AppColors.kYellowColor,
-                BlendMode.srcIn,
-              ),
+    bottomNavigationBar: BottomNavigationBar(
+      onTap: _onTapPage,
+      currentIndex: _selectedIndex,
+      unselectedItemColor: theme.bottomNavigationBarTheme.unselectedItemColor ?? AppColors.kBlueColor,
+      selectedItemColor: theme.bottomNavigationBarTheme.selectedItemColor ?? AppColors.kBlueGrey,
+      selectedLabelStyle: AppTextStyle.kBottemLabelStyle,
+      elevation: 0,
+      items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: SvgPicture.asset(
+            "assets/house.svg",
+            width: 25,
+            height: 25,
+            colorFilter: ColorFilter.mode(
+              _selectedIndex == 0
+                  ? theme.bottomNavigationBarTheme.selectedItemColor ?? AppColors.kBlueGrey
+                  : theme.bottomNavigationBarTheme.unselectedItemColor ?? AppColors.kBlueColor,
+              BlendMode.srcIn,
             ),
-            label: "Home",
           ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/graduationcap.svg",
-              width: 30,
-              height: 30,
-              colorFilter: ColorFilter.mode(
-                _selectedIndex == 1
-                    ? AppColors.kBlueGrey
-                    : AppColors.kYellowColor,
-                BlendMode.srcIn,
-              ),
+          label: "Home",
+        ),
+        BottomNavigationBarItem(
+          icon: SvgPicture.asset(
+            "assets/graduationcap.svg",
+            width: 30,
+            height: 30,
+            colorFilter: ColorFilter.mode(
+              _selectedIndex == 1
+                  ? theme.bottomNavigationBarTheme.selectedItemColor ?? AppColors.kBlueGrey
+                  : theme.bottomNavigationBarTheme.unselectedItemColor ?? AppColors.kBlueColor,
+              BlendMode.srcIn,
             ),
-            label: "Courses",
           ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/notebookpen.svg",
-              width: 25,
-              height: 25,
-              colorFilter: ColorFilter.mode(
-                _selectedIndex == 2
-                    ? AppColors.kBlueGrey
-                    : AppColors.kYellowColor,
-                BlendMode.srcIn,
-              ),
+          label: "Courses",
+        ),
+        BottomNavigationBarItem(
+          icon: SvgPicture.asset(
+            "assets/notebookpen.svg",
+            width: 25,
+            height: 25,
+            colorFilter: ColorFilter.mode(
+              _selectedIndex == 2
+                  ? theme.bottomNavigationBarTheme.selectedItemColor ?? AppColors.kBlueGrey
+                  : theme.bottomNavigationBarTheme.unselectedItemColor ?? AppColors.kBlueColor,
+              BlendMode.srcIn,
             ),
-            label: "Assignment",
           ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/noteicon.svg",
-              width: 25,
-              height: 25,
-              colorFilter: ColorFilter.mode(
-                _selectedIndex == 3
-                    ? AppColors.kBlueGrey
-                    : AppColors.kYellowColor,
-                BlendMode.srcIn,
-              ),
+          label: "Assignment",
+        ),
+        BottomNavigationBarItem(
+          icon: SvgPicture.asset(
+            "assets/noteicon.svg",
+            width: 25,
+            height: 25,
+            colorFilter: ColorFilter.mode(
+              _selectedIndex == 3
+                  ? theme.bottomNavigationBarTheme.selectedItemColor ?? AppColors.kBlueGrey
+                  : theme.bottomNavigationBarTheme.unselectedItemColor ?? AppColors.kBlueColor,
+              BlendMode.srcIn,
             ),
-            label: "Notes"
           ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/userprofile.svg",
-              width: 25,
-              height: 25,
-              colorFilter: ColorFilter.mode(
-                _selectedIndex == 4
-                    ? AppColors.kBlueGrey
-                    : AppColors.kYellowColor,
-                BlendMode.srcIn,
-              ),
+          label: "Notes",
+        ),
+        BottomNavigationBarItem(
+          icon: SvgPicture.asset(
+            "assets/userprofile.svg",
+            width: 25,
+            height: 25,
+            colorFilter: ColorFilter.mode(
+              _selectedIndex == 4
+                  ? theme.bottomNavigationBarTheme.selectedItemColor ?? AppColors.kBlueGrey
+                  : theme.bottomNavigationBarTheme.unselectedItemColor ?? AppColors.kBlueColor,
+              BlendMode.srcIn,
             ),
-            label: "Profile",
           ),
-        ],
-      ),
-      body: Center(child: _pages.elementAt(_selectedIndex)),
-    );
+          label: "Profile",
+        ),
+      ],
+    ),
+    body: Center(child: _pages.elementAt(_selectedIndex)),
+  );
   }
 }

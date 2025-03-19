@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:learn_planner/helpers/app_helpers.dart';
+import 'package:learn_planner/providers/theme_provider.dart';
 import 'package:learn_planner/services/user_service.dart';
 import 'package:learn_planner/utils/app_colors.dart';
 import 'package:learn_planner/utils/app_constance.dart';
 import 'package:learn_planner/utils/app_text_style.dart';
 import 'package:learn_planner/widgets/custom_input_field.dart';
+import 'package:provider/provider.dart';
 
 class LearnerProfilePage extends StatefulWidget {
   const LearnerProfilePage({super.key});
@@ -81,6 +83,29 @@ class _LearnerProfilePageState extends State<LearnerProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Learner Profile", style: AppTextStyle.kMainTitleStyle),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Provider.of<ThemeProvider>(
+                context,
+                listen: false,
+              ).toggleTheme(Theme.of(context).brightness != Brightness.dark);
+            },
+            icon:
+                Theme.of(context).brightness == Brightness.dark
+                    ? Icon(
+                      Icons.light_mode,
+                      color: AppColors.kYellowColor,
+                      size: 42,
+                    )
+                    : Icon(
+                      Icons.dark_mode,
+                      color: AppColors.kBlackColor,
+                      size: 42,
+                    ),
+          ),
+          SizedBox(width: 5),
+        ],
         centerTitle: true,
       ),
       body: SingleChildScrollView(

@@ -65,18 +65,18 @@ class NotesPage extends StatelessWidget {
                 final courseName = notesMap.keys.elementAt(index);
                 final notes = notesMap[courseName]!;
                 return ExpansionTile(
-                  collapsedIconColor: AppColors.kNoteCardColor1,
-                  iconColor: AppColors.kNoteCardColor1,
+                  collapsedIconColor: AppColors.kBlueColor,
+                  iconColor: AppColors.kBlueColor,
                   leading: Icon(
                     Icons.task,
                     size: 30,
-                    color: AppColors.kNoteCardColor1,
+                    color: AppColors.kBlueColor,
                   ),
                   title: Text(
                     courseName.toUpperCase(),
                     style: AppTextStyle.kNormalTextStyle.copyWith(
                       fontSize: 21,
-                      color: AppColors.kNoteCardColor1,
+                      color: AppColors.kBlueColor,
                     ),
                   ),
                   children:

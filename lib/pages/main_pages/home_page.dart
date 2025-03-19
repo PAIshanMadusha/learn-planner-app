@@ -75,7 +75,7 @@ class HomePage extends StatelessWidget {
                   "Your Courses",
                   style: AppTextStyle.kMainTitleStyle.copyWith(
                     fontSize: 26,
-                    color: AppColors.kYellowColor,
+                    color: AppColors.kBlueColor,
                   ),
                 ),
                 SizedBox(height: AppConstance.kSizedBoxValue),

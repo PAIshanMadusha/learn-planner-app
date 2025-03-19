@@ -111,14 +111,14 @@ class AddNewAssignmentPage extends StatelessWidget {
           icon: Icon(
             Icons.arrow_back_ios,
             size: 35,
-            color: AppColors.kYellowColor,
+            color: AppColors.kBlueGrey,
           ),
         ),
         title: Text(
           "Add a New Assignment",
           style: AppTextStyle.kMainTitleStyle.copyWith(
             fontSize: 28,
-            color: AppColors.kYellowColor,
+            color: AppColors.kBlueGrey,
           ),
         ),
         centerTitle: true,
