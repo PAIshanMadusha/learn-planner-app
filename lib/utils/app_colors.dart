@@ -33,4 +33,13 @@ class AppColors {
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   );
+
+  static const Color kProfileCardColor1 = Color(0xffC07F00);
+  static const Color kProfileCardColor2 = Color(0xff4C3D3D);
+
+  static const Gradient kProfileCardColor = LinearGradient(
+    colors: [kProfileCardColor1, kProfileCardColor2],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
 }
