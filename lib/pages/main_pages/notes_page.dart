@@ -1,40 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
-import 'package:learn_planner/models/assignment_model.dart';
-import 'package:learn_planner/services/firestore_database/assignment_service.dart';
-import 'package:learn_planner/services/firestore_database/notification_service.dart';
+import 'package:learn_planner/models/note_model.dart';
+import 'package:learn_planner/services/firestore_database/note_service.dart';
 import 'package:learn_planner/utils/app_colors.dart';
 import 'package:learn_planner/utils/app_constance.dart';
 import 'package:learn_planner/utils/app_text_style.dart';
-import 'package:learn_planner/widgets/countdown_timer.dart';
 
-class AssignmentsPage extends StatelessWidget {
-  const AssignmentsPage({super.key});
+class NotesPage extends StatelessWidget {
+  const NotesPage({super.key});
 
-  Future<Map<String, List<AssignmentModel>>> _fetchAssignment() async {
-    return await AssignmentService().getAssignmentsByCourseName();
-  }
-
-  Future<void> _checkAndStoreOverdueAssignments() async {
-    await NotificationService().storeOverdueAssignments();
+  Future<Map<String, List<NoteModel>>> _fetchNotes() async {
+    return await NoteService().getNotesByCourseName();
   }
 
   @override
   Widget build(BuildContext context) {
-    //Trigger the Method when the Screen is Loaded
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkAndStoreOverdueAssignments();
-    });
     return Scaffold(
       appBar: AppBar(
-        title: Text("Assignments Page", style: AppTextStyle.kMainTitleStyle),
+        title: Text("Notes Page", style: AppTextStyle.kMainTitleStyle),
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(AppConstance.kPaddingValue),
+        padding: EdgeInsets.all(AppConstance.kPaddingValue),
         child: FutureBuilder(
-          future: _fetchAssignment(),
+          future: _fetchNotes(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
@@ -57,7 +46,7 @@ class AssignmentsPage extends StatelessWidget {
                     SizedBox(
                       width: 280,
                       child: Text(
-                        "No Assignments are available!",
+                        "No Notes are available!",
                         style: AppTextStyle.kLabelTextStyle.copyWith(
                           fontSize: 12,
                         ),
@@ -68,30 +57,30 @@ class AssignmentsPage extends StatelessWidget {
                 ),
               );
             }
-            final assignmentsMap = snapshot.data!;
+            final notesMap = snapshot.data!;
             return ListView.builder(
               padding: EdgeInsets.only(bottom: AppConstance.kPaddingValue * 2),
-              itemCount: assignmentsMap.keys.length,
+              itemCount: notesMap.keys.length,
               itemBuilder: (context, index) {
-                final courseName = assignmentsMap.keys.elementAt(index);
-                final assignments = assignmentsMap[courseName]!;
+                final courseName = notesMap.keys.elementAt(index);
+                final notes = notesMap[courseName]!;
                 return ExpansionTile(
-                  collapsedIconColor: AppColors.kAssignmentCardColor1,
-                  iconColor: AppColors.kAssignmentCardColor1,
+                  collapsedIconColor: AppColors.kNoteCardColor1,
+                  iconColor: AppColors.kNoteCardColor1,
                   leading: Icon(
                     Icons.task,
                     size: 30,
-                    color: AppColors.kAssignmentCardColor1,
+                    color: AppColors.kNoteCardColor1,
                   ),
                   title: Text(
                     courseName.toUpperCase(),
                     style: AppTextStyle.kNormalTextStyle.copyWith(
                       fontSize: 21,
-                      color: AppColors.kAssignmentCardColor1,
+                      color: AppColors.kNoteCardColor1,
                     ),
                   ),
                   children:
-                      assignments.map((assignment) {
+                      notes.map((note) {
                         return Container(
                           margin: EdgeInsets.only(
                             bottom: AppConstance.kPaddingValue,
@@ -117,105 +106,116 @@ class AssignmentsPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Assignment Name:",
+                                "Note Title:",
                                 style: AppTextStyle.kBottemLabelStyle.copyWith(
                                   color: AppColors.kYellowColor,
                                 ),
                               ),
                               Text(
-                                assignment.name,
+                                note.title,
                                 style: AppTextStyle.kNormalTextStyle.copyWith(
                                   fontSize: 15,
                                 ),
                               ),
                               SizedBox(height: AppConstance.kSizedBoxValue),
                               Text(
-                                "Assignment Subject:",
+                                "Note Section:",
                                 style: AppTextStyle.kBottemLabelStyle.copyWith(
                                   color: AppColors.kYellowColor,
                                 ),
                               ),
                               Text(
-                                assignment.subject,
+                                note.section,
                                 style: AppTextStyle.kNormalTextStyle.copyWith(
                                   fontSize: 15,
                                 ),
                               ),
                               SizedBox(height: AppConstance.kSizedBoxValue),
                               Text(
-                                "Assignment Duration:",
+                                "Note Description:",
                                 style: AppTextStyle.kBottemLabelStyle.copyWith(
                                   color: AppColors.kYellowColor,
                                 ),
                               ),
                               Text(
-                                assignment.duration,
+                                note.description,
                                 style: AppTextStyle.kNormalTextStyle.copyWith(
                                   fontSize: 15,
                                 ),
                               ),
                               SizedBox(height: AppConstance.kSizedBoxValue),
                               Text(
-                                "Assignment Start Date:",
+                                "Note References:",
                                 style: AppTextStyle.kBottemLabelStyle.copyWith(
                                   color: AppColors.kYellowColor,
                                 ),
                               ),
                               Text(
-                                DateFormat.yMMMd().format(assignment.startDate),
+                                note.references,
                                 style: AppTextStyle.kNormalTextStyle.copyWith(
                                   fontSize: 15,
                                 ),
                               ),
                               SizedBox(height: AppConstance.kSizedBoxValue),
-                              Text(
-                                "Assignment Due Date:",
-                                style: AppTextStyle.kBottemLabelStyle.copyWith(
-                                  color: AppColors.kYellowColor,
+                              if (note.imageUrl != null)
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Image View",
+                                      style: AppTextStyle.kNormalTextStyle,
+                                    ),
+                                    SizedBox(
+                                      height: AppConstance.kSizedBoxValue,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          AppConstance.kRoundCornerValue,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: AppColors.kBlueGrey,
+                                            spreadRadius: 2,
+                                            blurRadius: 1,
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                          AppConstance.kRoundCornerValue,
+                                        ),
+                                        child: Image.network(
+                                          note.imageUrl!,
+                                          height: 540,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              else
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Image View",
+                                      style: AppTextStyle.kNormalTextStyle,
+                                    ),
+                                    SizedBox(
+                                      height: AppConstance.kSizedBoxValue,
+                                    ),
+                                    Center(
+                                      child: SvgPicture.asset(
+                                        "assets/emptydatapic.svg",
+                                        width: 180,
+                                        height: 180,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              Text(
-                                DateFormat.yMMMd().format(assignment.dueDate),
-                                style: AppTextStyle.kNormalTextStyle.copyWith(
-                                  fontSize: 15,
-                                ),
-                              ),
-                              SizedBox(height: AppConstance.kSizedBoxValue),
-                              Text(
-                                "Assignment Ending Time:",
-                                style: AppTextStyle.kBottemLabelStyle.copyWith(
-                                  color: AppColors.kYellowColor,
-                                ),
-                              ),
-                              Text(
-                                DateFormat.Hm().format(
-                                  DateTime(
-                                    0,
-                                    0,
-                                    0,
-                                    assignment.dueTime.hour,
-                                    assignment.dueTime.minute,
-                                  ),
-                                ),
-                                style: AppTextStyle.kNormalTextStyle.copyWith(
-                                  fontSize: 15,
-                                ),
-                              ),
-                              SizedBox(height: AppConstance.kSizedBoxValue),
-                              Text(
-                                "Assignment Description:",
-                                style: AppTextStyle.kBottemLabelStyle.copyWith(
-                                  color: AppColors.kYellowColor,
-                                ),
-                              ),
-                              Text(
-                                assignment.description,
-                                style: AppTextStyle.kNormalTextStyle.copyWith(
-                                  fontSize: 15,
-                                ),
-                              ),
-                              SizedBox(height: AppConstance.kSizedBoxValue),
-                              CountdownTimer(dueDate: assignment.dueDate),
                             ],
                           ),
                         );

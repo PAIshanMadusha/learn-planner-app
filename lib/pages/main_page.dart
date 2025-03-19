@@ -4,6 +4,7 @@ import 'package:learn_planner/pages/main_pages/assignments_page.dart';
 import 'package:learn_planner/pages/main_pages/courses_page.dart';
 import 'package:learn_planner/pages/main_pages/home_page.dart';
 import 'package:learn_planner/pages/main_pages/learner_profile_page.dart';
+import 'package:learn_planner/pages/main_pages/notes_page.dart';
 import 'package:learn_planner/utils/app_colors.dart';
 import 'package:learn_planner/utils/app_text_style.dart';
 
@@ -21,6 +22,7 @@ class _MainPageState extends State<MainPage> {
     HomePage(),
     CoursesPage(),
     AssignmentsPage(),
+    NotesPage(),
     LearnerProfilePage(),
   ];
 
@@ -85,11 +87,25 @@ class _MainPageState extends State<MainPage> {
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
-              "assets/userprofile.svg",
+              "assets/noteicon.svg",
               width: 25,
               height: 25,
               colorFilter: ColorFilter.mode(
                 _selectedIndex == 3
+                    ? AppColors.kBlueGrey
+                    : AppColors.kYellowColor,
+                BlendMode.srcIn,
+              ),
+            ),
+            label: "Notes"
+          ),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              "assets/userprofile.svg",
+              width: 25,
+              height: 25,
+              colorFilter: ColorFilter.mode(
+                _selectedIndex == 4
                     ? AppColors.kBlueGrey
                     : AppColors.kYellowColor,
                 BlendMode.srcIn,
