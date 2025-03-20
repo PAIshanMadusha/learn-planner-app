@@ -60,4 +60,20 @@ class NotificationService {
       return [];
     }
   }
+
+  //Delete the Notification form the Firestore Database
+  Future<void> deleteNotification(String assignmentId) async {
+    try {
+      final QuerySnapshot snapshot =
+          await notificationCollection
+              .where("assignmentId", isEqualTo: assignmentId)
+              .get();
+
+      for(final doc in snapshot.docs){
+        await notificationCollection.doc(doc.id).delete();
+      }       
+    } catch (error) {
+      debugPrint("Error Deleting a Notification: $error");
+    }
+  }
 }

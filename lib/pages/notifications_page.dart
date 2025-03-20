@@ -2,14 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:learn_planner/helpers/app_helpers.dart';
 import 'package:learn_planner/models/notification_model.dart';
 import 'package:learn_planner/services/firestore_database/notification_service.dart';
 import 'package:learn_planner/utils/app_colors.dart';
 import 'package:learn_planner/utils/app_constance.dart';
 import 'package:learn_planner/utils/app_text_style.dart';
 
-class NotificationsPage extends StatelessWidget {
+class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
+
+  @override
+  State<NotificationsPage> createState() => _NotificationsPageState();
+}
+
+class _NotificationsPageState extends State<NotificationsPage> {
+
+  late Future<List<NotificationModel>> _futureData;
+
+  List<NotificationModel> _notifications = [];
+
+  @override
+  void initState() {
+    _loadData();
+    super.initState();
+  }
+
+  void _loadData(){
+    _futureData = _fetchAllNotifications();
+    _futureData.then((data){
+      setState(() {
+        _notifications = data;
+      });
+    });
+  }
 
   Future<List<NotificationModel>> _fetchAllNotifications() async {
     return NotificationService().getNotifications();
@@ -42,7 +68,7 @@ class NotificationsPage extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.all(AppConstance.kPaddingValue),
         child: FutureBuilder(
-          future: _fetchAllNotifications(),
+          future: _futureData,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
@@ -172,6 +198,38 @@ class NotificationsPage extends StatelessWidget {
                         style: AppTextStyle.kNormalTextStyle.copyWith(
                           fontSize: 21,
                           color: AppColors.kRedAccentColor,
+                        ),
+                      ),
+                      SizedBox(height: AppConstance.kSizedBoxValue),
+                      Center(
+                        child: ElevatedButton.icon(
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                              AppColors.kRedAccentColor,
+                            ),
+                          ),
+                          onPressed: () async{
+                            await NotificationService().deleteNotification(notification.assignmentId);
+                            setState(() {
+                              _notifications.removeAt(index);
+                            });
+                            if(context.mounted) {
+                              AppHelpers.showSnackBar(context, "Overdue Assignment Deleted Successfully!");
+                            }
+                            _loadData();
+                          },
+                          label: Text(
+                            "Delete Assignment",
+                            style: AppTextStyle.kNormalTextStyle.copyWith(
+                              color: AppColors.kWhiteColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                          icon: Icon(
+                            Icons.delete,
+                            size: 24,
+                            color: AppColors.kWhiteColor,
+                          ),
                         ),
                       ),
                     ],
