@@ -98,4 +98,20 @@ class NoteService {
       debugPrint("Error Deleting Note: $error");
     }
   }
+
+  //Update a Note Method
+  Future<void> updateNote(String courseId, String noteId, NoteModel note) async {
+    try {
+      final noteRef = FirebaseFirestore.instance
+          .collection('courses')
+          .doc(courseId)
+          .collection('notes')
+          .doc(noteId);  // Get the note by its ID
+
+      await noteRef.update(note.toJson());  // Update note with new data
+    } catch (error) {
+      debugPrint("Error updating note: $error");
+      throw Exception("Failed to update note");
+    }
+  }
 }

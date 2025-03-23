@@ -15,28 +15,45 @@ import 'package:image_picker/image_picker.dart';
 
 class AddNewNotePage extends StatefulWidget {
   final CourseModel course;
-  const AddNewNotePage({super.key, required this.course});
+  final NoteModel? noteToEdit; // Optional parameter for editing
+
+  const AddNewNotePage({super.key, required this.course, this.noteToEdit});
 
   @override
   State<AddNewNotePage> createState() => _AddNewNotePageState();
 }
 
 class _AddNewNotePageState extends State<AddNewNotePage> {
-  final _formKey = GlobalKey<FormState>();
+ final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _noteTitleController = TextEditingController();
-
-  final TextEditingController _noteDescriptionController =
-      TextEditingController();
-
-  final TextEditingController _noteSectionController = TextEditingController();
-
-  final TextEditingController _noteReferencesController =
-      TextEditingController();
-
-  final ImagePicker _imagePicker = ImagePicker();
+  late TextEditingController _noteTitleController;
+  late TextEditingController _noteDescriptionController;
+  late TextEditingController _noteSectionController;
+  late TextEditingController _noteReferencesController;
 
   XFile? _selectedImage;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers with existing data if editing
+    _noteTitleController = TextEditingController(text: widget.noteToEdit?.title ?? "");
+    _noteDescriptionController = TextEditingController(text: widget.noteToEdit?.description ?? "");
+    _noteSectionController = TextEditingController(text: widget.noteToEdit?.section ?? "");
+    _noteReferencesController = TextEditingController(text: widget.noteToEdit?.references ?? "");
+  }
+
+  //Dispose
+  @override
+  void dispose() {
+    _noteTitleController.dispose();
+    _noteDescriptionController.dispose();
+    _noteSectionController.dispose();
+    _noteReferencesController.dispose();
+    super.dispose();
+  }
+
+  final ImagePicker _imagePicker = ImagePicker();
 
   //Pick Image from Gallery
   Future<void> _pickImage() async {
@@ -48,36 +65,45 @@ class _AddNewNotePageState extends State<AddNewNotePage> {
     });
   }
 
-  //Add Note
-  void _addNote(BuildContext context) async {
-    if (_formKey.currentState?.validate() ?? false) {
-      try {
-        //Create a New Note Object
-        final NoteModel note = NoteModel(
-          id: "",
-          title: _noteTitleController.text,
-          section: _noteSectionController.text,
-          description: _noteDescriptionController.text,
-          references: _noteReferencesController.text,
-          imageData: _selectedImage != null ? File(_selectedImage!.path) : null,
-        );
+  //Save Note
+  void _saveNote() async {
+  if (_formKey.currentState?.validate() ?? false) {
+    try {
+      final NoteModel note = NoteModel(
+        id: widget.noteToEdit?.id ?? "",
+        title: _noteTitleController.text,
+        description: _noteDescriptionController.text,
+        section: _noteSectionController.text,
+        references: _noteReferencesController.text,
+        imageData: _selectedImage != null ? File(_selectedImage!.path) : null,
+      );
+
+      if (widget.noteToEdit == null) {
+        // Add new note
         await NoteService().createNote(widget.course.id, note);
-        if(context.mounted) {
+        if (mounted) {
           AppHelpers.showSnackBar(context, "Note Added Successfully!");
         }
-        
-        await Future.delayed(Duration(seconds: 1));
+      } else {
+        // Update existing note
+        await NoteService().updateNote(widget.course.id, widget.noteToEdit!.id, note);
+        if (mounted) {
+          AppHelpers.showSnackBar(context, "Note Updated Successfully!");
+        }
+      }
 
-        if(context.mounted) {
-          GoRouter.of(context).pop();
-        }
-      } catch (error) {
-        if(context.mounted) {
-          AppHelpers.showSnackBar(context, "Failed to Add Successfully!");
-        }
+      // Navigate back to the course page with refresh
+      if (mounted) {
+        GoRouter.of(context).pop(true); // Notify that the note was saved
+      }
+    } catch (error) {
+      if (mounted) {
+        debugPrint("Error updating note: $error"); // Add detailed error logging
+        AppHelpers.showSnackBar(context, "Failed to Save Note!");
       }
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -246,9 +272,9 @@ class _AddNewNotePageState extends State<AddNewNotePage> {
                         ),
                     SizedBox(height: AppConstance.kSizedBoxValue * 2),
                     CustomButton(
-                      textLabel: "Add Note",
+                      textLabel: widget.noteToEdit == null ? "Add Note" : "Update Note",
                       icon: Icons.task_alt_sharp,
-                      onPressed: () => _addNote(context),
+                      onPressed: _saveNote,
                     ),
                     SizedBox(height: AppConstance.kSizedBoxValue),
                   ],

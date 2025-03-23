@@ -5,6 +5,7 @@ import 'package:learn_planner/helpers/app_helpers.dart';
 import 'package:learn_planner/models/assignment_model.dart';
 import 'package:learn_planner/models/course_model.dart';
 import 'package:learn_planner/models/note_model.dart';
+import 'package:learn_planner/pages/add_new_note_page.dart';
 import 'package:learn_planner/services/firestore_database/assignment_service.dart';
 import 'package:learn_planner/services/firestore_database/course_service.dart';
 import 'package:learn_planner/services/firestore_database/note_service.dart';
@@ -499,17 +500,54 @@ class _CoursesPageState extends State<CoursesPage> {
                                                 color: AppColors.kBlueGrey,
                                               ),
                                         ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            IconButton(
+                                              onPressed: () async {
+                                                await _deleteNote(
+                                                  course.id,
+                                                  note.id,
+                                                );
+                                              },
+                                              icon: Icon(
+                                                Icons.delete,
+                                                color: AppColors.kYellowColor,
+                                                size: 32,
+                                              ),
+                                            ),
+                                            SizedBox(width: 6,),
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.edit,
+                                                color: Colors.blue,
+                                                size: 32,
+                                              ),
+                                              onPressed: () async {
+                                                bool? isUpdated =
+                                                    await Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder:
+                                                            (
+                                                              context,
+                                                            ) => AddNewNotePage(
+                                                              course: course,
+                                                              noteToEdit: note,
+                                                            ),
+                                                      ),
+                                                    );
+                                                if (isUpdated == true) {
+                                                  setState(() {
+                                                    _futureData =
+                                                        _fetchAllData();
+                                                  });
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        ),
                                       ],
-                                    ),
-                                    trailing: IconButton(
-                                      onPressed: () async {
-                                        await _deleteNote(course.id, note.id);
-                                      },
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: AppColors.kYellowColor,
-                                        size: 28,
-                                      ),
                                     ),
                                   ),
                                 );
