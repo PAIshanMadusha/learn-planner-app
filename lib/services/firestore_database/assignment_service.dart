@@ -90,4 +90,24 @@ class AssignmentService {
       debugPrint("Error Deleting Assignment!: $error");
     }
   }
+
+  //Update a Assignment Method
+  Future<void> updateAssignment(
+    String courseId,
+    String assignmentId,
+    AssignmentModel assignment,
+  ) async {
+    try {
+      final assignmentRef = FirebaseFirestore.instance
+          .collection("courses")
+          .doc(courseId)
+          .collection("assignments")
+          .doc(assignmentId); //Get the Assignment by Its ID
+
+      await assignmentRef.update(assignment.toJson());
+    } catch (error) {
+      debugPrint("Error Updating Assignment: $error");
+      throw Exception("Faild to Update Assignment");
+    }
+  }
 }

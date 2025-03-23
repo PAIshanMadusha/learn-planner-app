@@ -11,35 +11,122 @@ import 'package:learn_planner/utils/app_text_style.dart';
 import 'package:learn_planner/widgets/custom_button.dart';
 import 'package:learn_planner/widgets/custom_input_field.dart';
 
-class AddNewAssignmentPage extends StatelessWidget {
+class AddNewAssignmentPage extends StatefulWidget {
   final CourseModel course;
+  final AssignmentModel? assignmentToEdit;
 
+  const AddNewAssignmentPage({
+    super.key,
+    required this.course,
+    this.assignmentToEdit,
+  });
+
+  @override
+  State<AddNewAssignmentPage> createState() => _AddNewAssignmentPageState();
+}
+
+class _AddNewAssignmentPageState extends State<AddNewAssignmentPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _assignmentSubjectController =
-      TextEditingController();
-  final TextEditingController _assignmentNameController =
-      TextEditingController();
-  final TextEditingController _assignmentDurationController =
-      TextEditingController();
-  final TextEditingController _assignmentDescriptionController =
-      TextEditingController();
+  late TextEditingController _assignmentSubjectController;
+  late TextEditingController _assignmentNameController;
+  late TextEditingController _assignmentDurationController;
+  late TextEditingController _assignmentDescriptionController;
 
-  final ValueNotifier<DateTime> _selectStartDate = ValueNotifier<DateTime>(
-    DateTime.now(),
-  );
-  final ValueNotifier<DateTime> _selectDate = ValueNotifier<DateTime>(
-    DateTime.now(),
-  );
-  final ValueNotifier<TimeOfDay> _selectTime = ValueNotifier<TimeOfDay>(
-    TimeOfDay.now(),
-  );
+  late ValueNotifier<DateTime> _selectStartDate;
+  late ValueNotifier<DateTime> _selectDate;
+  late ValueNotifier<TimeOfDay> _selectTime;
 
-  //Initialize ValueNotifiers
-  AddNewAssignmentPage({super.key, required this.course}) {
-    _selectStartDate.value = DateTime.now();
-    _selectDate.value = DateTime.now();
-    _selectTime.value = TimeOfDay.now();
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize controllers with existing data if editing
+    _assignmentSubjectController = TextEditingController(
+      text: widget.assignmentToEdit?.subject ?? "",
+    );
+    _assignmentNameController = TextEditingController(
+      text: widget.assignmentToEdit?.name ?? "",
+    );
+    _assignmentDurationController = TextEditingController(
+      text: widget.assignmentToEdit?.duration ?? "",
+    );
+    _assignmentDescriptionController = TextEditingController(
+      text: widget.assignmentToEdit?.description ?? "",
+    );
+
+    _selectStartDate = ValueNotifier<DateTime>(
+      widget.assignmentToEdit?.startDate ?? DateTime.now(),
+    );
+    _selectDate = ValueNotifier<DateTime>(
+      widget.assignmentToEdit?.dueDate ?? DateTime.now(),
+    );
+    _selectTime = ValueNotifier<TimeOfDay>(
+      widget.assignmentToEdit?.dueTime ?? TimeOfDay.now(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _assignmentSubjectController.dispose();
+    _assignmentNameController.dispose();
+    _assignmentDurationController.dispose();
+    _assignmentDescriptionController.dispose();
+    super.dispose();
+  }
+
+  // Add or Update Assignment
+  void _saveAssignment() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      try {
+        // Create an Assignment Model
+        final AssignmentModel assignment = AssignmentModel(
+          id: widget.assignmentToEdit?.id ?? "", // Use existing ID if editing
+          subject: _assignmentSubjectController.text,
+          name: _assignmentNameController.text,
+          duration: _assignmentDurationController.text,
+          description: _assignmentDescriptionController.text,
+          startDate: _selectStartDate.value,
+          dueDate: _selectDate.value,
+          dueTime: _selectTime.value,
+        );
+
+        if (widget.assignmentToEdit == null) {
+          // Add new assignment
+          await AssignmentService().createAssignment(
+            widget.course.id,
+            assignment,
+          );
+          if (mounted) {
+            AppHelpers.showSnackBar(context, "Assignment Added Successfully!");
+          }
+        } else {
+          // Update existing assignment
+          await AssignmentService().updateAssignment(
+            widget.course.id,
+            widget.assignmentToEdit!.id,
+            assignment,
+          );
+          if (mounted) {
+            AppHelpers.showSnackBar(
+              context,
+              "Assignment Updated Successfully!",
+            );
+          }
+        }
+
+        // Navigate back to the course page with refresh
+        if (mounted) {
+          GoRouter.of(
+            context,
+          ).pop(true); // Notify that the assignment was saved
+        }
+      } catch (error) {
+        if (mounted) {
+          AppHelpers.showSnackBar(context, "Failed to Save Assignment!");
+        }
+      }
+    }
   }
 
   //Date Picker
@@ -65,40 +152,7 @@ class AddNewAssignmentPage extends StatelessWidget {
       _selectTime.value = pickedTime;
     }
   }
-
-  //Add Assignment
-  void _addAssignment(BuildContext context) async {
-    if (_formKey.currentState?.validate() ?? false) {
-      try {
-        //Create a New Assignment
-        final AssignmentModel assignment = AssignmentModel(
-          id: "",
-          subject: _assignmentSubjectController.text,
-          name: _assignmentNameController.text,
-          duration: _assignmentDurationController.text,
-          description: _assignmentDescriptionController.text,
-          startDate: _selectStartDate.value,
-          dueDate: _selectDate.value,
-          dueTime: _selectTime.value,
-        );
-        //Add Assignment to Database
-        AssignmentService().createAssignment(course.id, assignment);
-
-        AppHelpers.showSnackBar(context, "Assignment Added Successfully!");
-
-        await Future.delayed(Duration(seconds: 1));
-
-        if (context.mounted) {
-          GoRouter.of(context).pop();
-        }
-      } catch (error) {
-        if (context.mounted) {
-          AppHelpers.showSnackBar(context, "Faild to Add Assignment!");
-        }
-      }
-    }
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -350,9 +404,12 @@ class AddNewAssignmentPage extends StatelessWidget {
                     ),
                     SizedBox(height: AppConstance.kSizedBoxValue * 2),
                     CustomButton(
-                      textLabel: "Add Assignment",
+                      textLabel:
+                          widget.assignmentToEdit == null
+                              ? "Add Assignment"
+                              : "Update Assignment",
                       icon: Icons.add_task_sharp,
-                      onPressed: () => _addAssignment(context),
+                      onPressed: _saveAssignment,
                     ),
                   ],
                 ),

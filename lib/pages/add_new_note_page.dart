@@ -85,7 +85,7 @@ class _AddNewNotePageState extends State<AddNewNotePage> {
           AppHelpers.showSnackBar(context, "Note Added Successfully!");
         }
       } else {
-        // Update existing note
+        // Update existing note _AddNewNotePageState
         await NoteService().updateNote(widget.course.id, widget.noteToEdit!.id, note);
         if (mounted) {
           AppHelpers.showSnackBar(context, "Note Updated Successfully!");

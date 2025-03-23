@@ -5,6 +5,7 @@ import 'package:learn_planner/helpers/app_helpers.dart';
 import 'package:learn_planner/models/assignment_model.dart';
 import 'package:learn_planner/models/course_model.dart';
 import 'package:learn_planner/models/note_model.dart';
+import 'package:learn_planner/pages/add_new_assignment_page.dart';
 import 'package:learn_planner/pages/add_new_note_page.dart';
 import 'package:learn_planner/services/firestore_database/assignment_service.dart';
 import 'package:learn_planner/services/firestore_database/course_service.dart';
@@ -403,20 +404,74 @@ class _CoursesPageState extends State<CoursesPage> {
                                                 color: AppColors.kBlueGrey,
                                               ),
                                         ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            IconButton(
+                                              onPressed: () async {
+                                                bool?
+                                                isUpdated = await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder:
+                                                        (context) =>
+                                                            AddNewAssignmentPage(
+                                                              course: course,
+                                                              assignmentToEdit:
+                                                                  assignment,
+                                                            ),
+                                                  ),
+                                                );
+                                                if (isUpdated == true) {
+                                                  setState(() {
+                                                    _futureData =
+                                                        _fetchAllData();
+                                                  });
+                                                }
+                                              },
+                                              icon: Icon(
+                                                Icons.edit,
+                                                color: AppColors.kBlueColor,
+                                                size: 32,
+                                                shadows: [
+                                                  Shadow(
+                                                    color: AppColors.kBlackColor
+                                                    // ignore: deprecated_member_use
+                                                    .withOpacity(0.4),
+                                                    blurRadius: 2,
+                                                    offset: Offset(1, 1),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(width: 6),
+                                            IconButton(
+                                              onPressed: () async {
+                                                await _deleteAssignment(
+                                                  course.id,
+                                                  assignment.id,
+                                                );
+                                              },
+                                              icon: Icon(
+                                                Icons.delete,
+                                                color:
+                                                    AppColors.kRedAccentColor,
+                                                size: 32,
+                                                shadows: [
+                                                  Shadow(
+                                                    color: AppColors.kBlackColor
+                                                    // ignore: deprecated_member_use
+                                                    .withOpacity(0.4),
+                                                    blurRadius: 2,
+                                                    offset: Offset(1, 1),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ],
-                                    ),
-                                    trailing: IconButton(
-                                      onPressed: () async {
-                                        await _deleteAssignment(
-                                          course.id,
-                                          assignment.id,
-                                        );
-                                      },
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: AppColors.kYellowColor,
-                                        size: 28,
-                                      ),
                                     ),
                                   ),
                                 );
@@ -501,27 +556,23 @@ class _CoursesPageState extends State<CoursesPage> {
                                               ),
                                         ),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
                                           children: [
-                                            IconButton(
-                                              onPressed: () async {
-                                                await _deleteNote(
-                                                  course.id,
-                                                  note.id,
-                                                );
-                                              },
-                                              icon: Icon(
-                                                Icons.delete,
-                                                color: AppColors.kYellowColor,
-                                                size: 32,
-                                              ),
-                                            ),
-                                            SizedBox(width: 6,),
                                             IconButton(
                                               icon: Icon(
                                                 Icons.edit,
                                                 color: Colors.blue,
                                                 size: 32,
+                                                shadows: [
+                                                  Shadow(
+                                                    color: AppColors.kBlackColor
+                                                    // ignore: deprecated_member_use
+                                                    .withOpacity(0.4),
+                                                    blurRadius: 2,
+                                                    offset: Offset(1, 1),
+                                                  ),
+                                                ],
                                               ),
                                               onPressed: () async {
                                                 bool? isUpdated =
@@ -544,6 +595,30 @@ class _CoursesPageState extends State<CoursesPage> {
                                                   });
                                                 }
                                               },
+                                            ),
+                                            SizedBox(width: 6),
+                                            IconButton(
+                                              onPressed: () async {
+                                                await _deleteNote(
+                                                  course.id,
+                                                  note.id,
+                                                );
+                                              },
+                                              icon: Icon(
+                                                Icons.delete,
+                                                color:
+                                                    AppColors.kRedAccentColor,
+                                                size: 32,
+                                                shadows: [
+                                                  Shadow(
+                                                    color: AppColors.kBlackColor
+                                                    // ignore: deprecated_member_use
+                                                    .withOpacity(0.4),
+                                                    blurRadius: 2,
+                                                    offset: Offset(1, 1),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),

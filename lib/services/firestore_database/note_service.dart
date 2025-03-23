@@ -103,9 +103,9 @@ class NoteService {
   Future<void> updateNote(String courseId, String noteId, NoteModel note) async {
     try {
       final noteRef = FirebaseFirestore.instance
-          .collection('courses')
+          .collection("courses")
           .doc(courseId)
-          .collection('notes')
+          .collection("notes")
           .doc(noteId);  // Get the note by its ID
 
       await noteRef.update(note.toJson());  // Update note with new data
