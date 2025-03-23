@@ -29,11 +29,15 @@ class HomePage extends StatelessWidget {
                       height: 170,
                       fit: BoxFit.cover,
                     ),
-                    Text(
-                      "Learn Planner",
-                      style: AppTextStyle.kMainTitleStyle,
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      child: Text(
+                        "Learn Planner",
+                        style: AppTextStyle.kMainTitleStyle,
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),

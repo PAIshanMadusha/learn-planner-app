@@ -678,12 +678,12 @@ class _CoursesPageState extends State<CoursesPage> {
                               "Update Course",
                               style: AppTextStyle.kNormalTextStyle.copyWith(
                                 color: AppColors.kWhiteColor,
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             icon: Icon(
                               Icons.edit,
-                              size: 18,
+                              size: 16,
                               color: AppColors.kWhiteColor,
                               shadows: [
                                 Shadow(
@@ -707,12 +707,12 @@ class _CoursesPageState extends State<CoursesPage> {
                               "Delete Course",
                               style: AppTextStyle.kNormalTextStyle.copyWith(
                                 color: AppColors.kWhiteColor,
-                                fontSize: 13,
+                                fontSize: 12,
                               ),
                             ),
                             icon: Icon(
                               Icons.delete,
-                              size: 18,
+                              size: 16,
                               color: AppColors.kWhiteColor,
                               shadows: [
                                 Shadow(

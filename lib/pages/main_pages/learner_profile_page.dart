@@ -116,7 +116,7 @@ class _LearnerProfilePageState extends State<LearnerProfilePage> {
                 SizedBox(height: 170, width: double.infinity),
                 Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.9,
+                  height: MediaQuery.of(context).size.height * 0.93,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(
@@ -275,6 +275,15 @@ class _LearnerProfilePageState extends State<LearnerProfilePage> {
                             Icons.notifications,
                             size: 35,
                             color: AppColors.kBlueGrey,
+                            shadows: [
+                              Shadow(
+                                color: AppColors.kBlackColor
+                                // ignore: deprecated_member_use
+                                .withOpacity(0.4),
+                                blurRadius: 2,
+                                offset: Offset(1, 1),
+                              ),
+                            ],
                           ),
                           title: Text(
                             "Your Overdue Assignments",
@@ -284,6 +293,50 @@ class _LearnerProfilePageState extends State<LearnerProfilePage> {
                           ),
                         ),
                       ),
+                      SizedBox(height: AppConstance.kSizedBoxValue),
+                      Text("Shortcut", style: AppTextStyle.kMainTitleStyle),
+                      SizedBox(height: AppConstance.kSizedBoxValue),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            AppConstance.kRoundCornerValue,
+                          ),
+                          gradient: AppColors.kProfileCardColor,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.kBlueGrey,
+                              spreadRadius: 1,
+                              blurRadius: 1,
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            GoRouter.of(context).push("/add-new-course");
+                          },
+                          leading: Icon(
+                            Icons.arrow_back_ios,
+                            size: 35,
+                            color: AppColors.kBlueColor,
+                            shadows: [
+                              Shadow(
+                                color: AppColors.kBlackColor
+                                // ignore: deprecated_member_use
+                                .withOpacity(0.4),
+                                blurRadius: 2,
+                                offset: Offset(1, 1),
+                              ),
+                            ],
+                          ),
+                          title: Text(
+                            "Add a Course",
+                            style: AppTextStyle.kNormalTextStyle.copyWith(
+                              color: AppColors.kBlueColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: AppConstance.kSizedBoxValue),
                     ],
                   ),
                 ),

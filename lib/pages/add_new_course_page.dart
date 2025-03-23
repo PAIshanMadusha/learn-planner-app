@@ -77,9 +77,8 @@ class _AddNewCoursePageState extends State<AddNewCoursePage> {
 
         // Navigate back to the course page with refresh
         if (context.mounted) {
-        GoRouter.of(context).pop(true);
-      }
-
+          GoRouter.of(context).pop(true);
+        }
       } catch (error) {
         if (context.mounted) {
           AppHelpers.showSnackBar(context, "Failed to Save Course!");
@@ -104,7 +103,7 @@ class _AddNewCoursePageState extends State<AddNewCoursePage> {
           ),
         ),
         title: Text(
-          "Add a New Course",
+          widget.courseToEdit == null ? "Add a New Course" : "Update Course",
           style: AppTextStyle.kMainTitleStyle.copyWith(
             fontSize: 28,
             color: AppColors.kBlueGrey,

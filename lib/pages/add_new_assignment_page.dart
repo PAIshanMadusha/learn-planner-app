@@ -152,7 +152,7 @@ class _AddNewAssignmentPageState extends State<AddNewAssignmentPage> {
       _selectTime.value = pickedTime;
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -169,7 +169,9 @@ class _AddNewAssignmentPageState extends State<AddNewAssignmentPage> {
           ),
         ),
         title: Text(
-          "Add a New Assignment",
+          widget.assignmentToEdit == null
+              ? "Add a New Assignment"
+              : "Update Assignment",
           style: AppTextStyle.kMainTitleStyle.copyWith(
             fontSize: 28,
             color: AppColors.kBlueGrey,
