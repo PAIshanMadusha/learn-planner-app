@@ -6,6 +6,7 @@ import 'package:learn_planner/models/assignment_model.dart';
 import 'package:learn_planner/models/course_model.dart';
 import 'package:learn_planner/models/note_model.dart';
 import 'package:learn_planner/pages/add_new_assignment_page.dart';
+import 'package:learn_planner/pages/add_new_course_page.dart';
 import 'package:learn_planner/pages/add_new_note_page.dart';
 import 'package:learn_planner/services/firestore_database/assignment_service.dart';
 import 'package:learn_planner/services/firestore_database/course_service.dart';
@@ -351,6 +352,15 @@ class _CoursesPageState extends State<CoursesPage> {
                                       Icons.task,
                                       size: 30,
                                       color: AppColors.kBlueGrey,
+                                      shadows: [
+                                        Shadow(
+                                          color: AppColors.kBlackColor
+                                          // ignore: deprecated_member_use
+                                          .withOpacity(0.4),
+                                          blurRadius: 2,
+                                          offset: Offset(1, 1),
+                                        ),
+                                      ],
                                     ),
                                     title: Column(
                                       crossAxisAlignment:
@@ -516,6 +526,15 @@ class _CoursesPageState extends State<CoursesPage> {
                                       Icons.note_add_sharp,
                                       size: 30,
                                       color: AppColors.kBlueGrey,
+                                      shadows: [
+                                        Shadow(
+                                          color: AppColors.kBlackColor
+                                          // ignore: deprecated_member_use
+                                          .withOpacity(0.4),
+                                          blurRadius: 2,
+                                          offset: Offset(1, 1),
+                                        ),
+                                      ],
                                     ),
                                     title: Column(
                                       crossAxisAlignment:
@@ -630,27 +649,83 @@ class _CoursesPageState extends State<CoursesPage> {
                         ),
                       ],
                       SizedBox(height: AppConstance.kSizedBoxValue),
-                      Center(
-                        child: ElevatedButton.icon(
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll(
-                              AppColors.kRedAccentColor,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton.icon(
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStatePropertyAll(
+                                AppColors.kBlueColor,
+                              ),
                             ),
-                          ),
-                          onPressed: () => _confirmDeleteCourse(course.id),
-                          label: Text(
-                            "Delete Course",
-                            style: AppTextStyle.kNormalTextStyle.copyWith(
+                            onPressed: () async {
+                              bool? isUpdated = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => AddNewCoursePage(
+                                        courseToEdit: course,
+                                      ),
+                                ),
+                              );
+                              if (isUpdated == true) {
+                                setState(() {
+                                  _futureData = _fetchAllData();
+                                });
+                              }
+                            },
+                            label: Text(
+                              "Update Course",
+                              style: AppTextStyle.kNormalTextStyle.copyWith(
+                                color: AppColors.kWhiteColor,
+                                fontSize: 13,
+                              ),
+                            ),
+                            icon: Icon(
+                              Icons.edit,
+                              size: 18,
                               color: AppColors.kWhiteColor,
-                              fontSize: 16,
+                              shadows: [
+                                Shadow(
+                                  color: AppColors.kBlackColor
+                                  // ignore: deprecated_member_use
+                                  .withOpacity(0.4),
+                                  blurRadius: 2,
+                                  offset: Offset(1, 1),
+                                ),
+                              ],
                             ),
                           ),
-                          icon: Icon(
-                            Icons.delete,
-                            size: 24,
-                            color: AppColors.kWhiteColor,
+                          ElevatedButton.icon(
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStatePropertyAll(
+                                AppColors.kRedAccentColor,
+                              ),
+                            ),
+                            onPressed: () => _confirmDeleteCourse(course.id),
+                            label: Text(
+                              "Delete Course",
+                              style: AppTextStyle.kNormalTextStyle.copyWith(
+                                color: AppColors.kWhiteColor,
+                                fontSize: 13,
+                              ),
+                            ),
+                            icon: Icon(
+                              Icons.delete,
+                              size: 18,
+                              color: AppColors.kWhiteColor,
+                              shadows: [
+                                Shadow(
+                                  color: AppColors.kBlackColor
+                                  // ignore: deprecated_member_use
+                                  .withOpacity(0.4),
+                                  blurRadius: 2,
+                                  offset: Offset(1, 1),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),

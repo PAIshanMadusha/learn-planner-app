@@ -79,4 +79,13 @@ class CourseService {
       debugPrint("Error deleting course and its subcollections: $error");
     }
   }
+
+  //Update a Course Method
+  Future<void> updateCourse(CourseModel course) async {
+    try {
+      await courseCollection.doc(course.id).update(course.toJson());
+    } catch (error) {
+      debugPrint("Error Updating Course: $error");
+    }
+  }
 }

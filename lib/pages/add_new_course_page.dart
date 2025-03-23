@@ -10,51 +10,84 @@ import 'package:learn_planner/utils/app_text_style.dart';
 import 'package:learn_planner/widgets/custom_button.dart';
 import 'package:learn_planner/widgets/custom_input_field.dart';
 
-class AddNewCoursePage extends StatelessWidget {
-  AddNewCoursePage({super.key});
+class AddNewCoursePage extends StatefulWidget {
+  final CourseModel? courseToEdit;
+  const AddNewCoursePage({super.key, this.courseToEdit});
 
+  @override
+  State<AddNewCoursePage> createState() => _AddNewCoursePageState();
+}
+
+class _AddNewCoursePageState extends State<AddNewCoursePage> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _courseNameController = TextEditingController();
+
   final TextEditingController _courseDescriptionController =
       TextEditingController();
+
   final TextEditingController _courseDurationController =
       TextEditingController();
+
   final TextEditingController _courseScheduleController =
       TextEditingController();
+
   final TextEditingController _courseInstructorController =
       TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.courseToEdit != null) {
+      // Populate fields for editing
+      _courseNameController.text = widget.courseToEdit!.name;
+      _courseDescriptionController.text = widget.courseToEdit!.description;
+      _courseDurationController.text = widget.courseToEdit!.duration;
+      _courseScheduleController.text = widget.courseToEdit!.schedule;
+      _courseInstructorController.text = widget.courseToEdit!.instructor;
+    }
+  }
+
   void _submitCourse(BuildContext context) async {
     if (_formKey.currentState?.validate() ?? false) {
-      //Save the Form
       _formKey.currentState?.save();
       try {
         final CourseModel course = CourseModel(
-          id: "",
+          id: widget.courseToEdit?.id ?? "", // Use existing ID if editing
           name: _courseNameController.text,
           description: _courseDescriptionController.text,
           duration: _courseDurationController.text,
           schedule: _courseScheduleController.text,
           instructor: _courseInstructorController.text,
         );
-        await CourseService().createNewCourse(course);
-        if (context.mounted) {
-          AppHelpers.showSnackBar(context, "Course Added Successfully!");
-        }
-        
-        await Future.delayed(Duration(seconds: 2));
 
-        if(context.mounted){
-          GoRouter.of(context).go("/");
+        if (widget.courseToEdit == null) {
+          await CourseService().createNewCourse(course);
+          if (context.mounted) {
+            AppHelpers.showSnackBar(context, "Course Added Successfully!");
+          }
+        } else {
+          await CourseService().updateCourse(course);
+          if (context.mounted) {
+            AppHelpers.showSnackBar(context, "Course Updated Successfully!");
+          }
         }
+
+        await Future.delayed(Duration(seconds: 1));
+
+        // Navigate back to the course page with refresh
+        if (context.mounted) {
+        GoRouter.of(context).pop(true);
+      }
+
       } catch (error) {
         if (context.mounted) {
-          AppHelpers.showSnackBar(context, "Faild to Add Course!");
+          AppHelpers.showSnackBar(context, "Failed to Save Course!");
         }
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,7 +188,10 @@ class AddNewCoursePage extends StatelessWidget {
                 ),
                 SizedBox(height: AppConstance.kSizedBoxValue * 2),
                 CustomButton(
-                  textLabel: "Add Course",
+                  textLabel:
+                      widget.courseToEdit == null
+                          ? "Add Course"
+                          : "Update Course",
                   icon: Icons.add_task_sharp,
                   onPressed: () {
                     _submitCourse(context);
