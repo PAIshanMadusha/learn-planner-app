@@ -51,7 +51,8 @@ class AssignmentService {
   }
 
   //Get all the Assignment with Course Name
-  Future<Map<String, List<AssignmentModel>>> getAssignmentsByCourseName() async {
+  Future<Map<String, List<AssignmentModel>>>
+  getAssignmentsByCourseName() async {
     try {
       final QuerySnapshot snapshot = await courseCollection.get();
 
@@ -72,6 +73,21 @@ class AssignmentService {
     } catch (error) {
       debugPrint("Error: $error");
       return {};
+    }
+  }
+
+  //Deleta a Assignment from a Course
+  Future<void> deleteAssignment(String courseId, String assignmnetId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("courses")
+          .doc(courseId)
+          .collection("assignments")
+          .doc(assignmnetId)
+          .delete();
+      debugPrint("Assignment Deleted Successfully!");
+    } catch (error) {
+      debugPrint("Error Deleting Assignment!: $error");
     }
   }
 }

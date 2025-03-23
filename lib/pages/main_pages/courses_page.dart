@@ -132,6 +132,24 @@ class _CoursesPageState extends State<CoursesPage> {
     }
   }
 
+  //Delete a Assignment
+  Future<void> _deleteAssignment(String courseId, String assignmnetId) async {
+    try {
+      await AssignmentService().deleteAssignment(courseId, assignmnetId);
+      setState(() {
+        _futureData = _fetchAllData();
+      });
+      if (mounted) {
+        AppHelpers.showSnackBar(context, "Assignment Deleted Successfully!");
+      }
+    } catch (error) {
+      debugPrint("Error deleting Assignment: $error");
+      if (mounted) {
+        AppHelpers.showSnackBar(context, "Faild to Delete Assignment!");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -386,6 +404,19 @@ class _CoursesPageState extends State<CoursesPage> {
                                         ),
                                       ],
                                     ),
+                                    trailing: IconButton(
+                                      onPressed: () async {
+                                        await _deleteAssignment(
+                                          course.id,
+                                          assignment.id,
+                                        );
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: AppColors.kYellowColor,
+                                        size: 28,
+                                      ),
+                                    ),
                                   ),
                                 );
                               }).toList(),
@@ -477,7 +508,7 @@ class _CoursesPageState extends State<CoursesPage> {
                                       icon: Icon(
                                         Icons.delete,
                                         color: AppColors.kYellowColor,
-                                        size: 30,
+                                        size: 28,
                                       ),
                                     ),
                                   ),
