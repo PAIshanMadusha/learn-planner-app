@@ -78,10 +78,24 @@ class NoteService {
         notesMap[doc["name"]] = notes;
       }
       return notesMap;
-      
     } catch (error) {
       debugPrint("Error: $error");
       return {};
+    }
+  }
+
+  //Delete a Note from a Course
+  Future<void> deleteNote(String courseId, String noteId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("courses")
+          .doc(courseId)
+          .collection("notes")
+          .doc(noteId)
+          .delete();
+      debugPrint("Note Deleted Successfully!");
+    } catch (error) {
+      debugPrint("Error Deleting Note: $error");
     }
   }
 }

@@ -114,6 +114,24 @@ class _CoursesPageState extends State<CoursesPage> {
     }
   }
 
+  //Delete a Note
+  Future<void> _deleteNote(String courseId, String noteId) async {
+    try {
+      await NoteService().deleteNote(courseId, noteId);
+      setState(() {
+        _futureData = _fetchAllData();
+      });
+      if (mounted) {
+        AppHelpers.showSnackBar(context, "Note Deleted Successfully!");
+      }
+    } catch (error) {
+      debugPrint("Error deleting note: $error");
+      if (mounted) {
+        AppHelpers.showSnackBar(context, "Faild to Delete Note!");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -451,6 +469,16 @@ class _CoursesPageState extends State<CoursesPage> {
                                               ),
                                         ),
                                       ],
+                                    ),
+                                    trailing: IconButton(
+                                      onPressed: () async {
+                                        await _deleteNote(course.id, note.id);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: AppColors.kYellowColor,
+                                        size: 30,
+                                      ),
                                     ),
                                   ),
                                 );
